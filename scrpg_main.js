@@ -1,23 +1,25 @@
 let GS = {
-  playerName: ""
+  playerName: "Nameless"
 };
 
-let p = UI.t;
+let t = UI.t;
 let bt = UI.bt;
 let cls = UI.cls;
 let textBox = UI.textBox;
 let wasteTime = UI.wasteTime;
 let il = UI.il;
+let yesOrNo = UI.yesOrNo;
+let anykey = UI.anykey;
 
 function start (){
   cls()
-  p("SC RPG")
+  t("SC RPG")
   bt("New Game", () => name()).setEnableTest(() => true);
 }
 
 function name(){
   cls();
-  p("Who are you?")
+  t("Who are you?")
   let nameText = textBox();
   
   bt("Ok", () => {
@@ -33,12 +35,17 @@ function name(){
 
 function story(){
   cls();
-  
-  wasteTime(1000).then(() => {
-    p("Hello " + GS.playerName);
+
+  anykey().then(() => {
+    return anykey();
+  }).then(() => {
+    return anykey();
+  }).then(() => {
+    t("done");
+    m.redraw();
   });
 }
 
-start();
+story();
 //initialize
 m.mount(document.body, Renderer);

@@ -43,6 +43,7 @@ var UI = {
       func: func,
       // color: c,
       enableTest: () => true,
+      forceEnable: false,
     };
     bt.setEnableTest = (fcn) => {bt.enableTest = fcn};
     return UI._add(bt);
@@ -62,6 +63,7 @@ var UI = {
     UI._l = [];
   },
 
+  // wasteTime(millisec).then(A_function_to_call_after)
   wasteTime: function(toWaste) {
     if (UI._states.timeToWaste) {
       console.log("already wasting time");
@@ -74,7 +76,7 @@ var UI = {
     let finalPromise = new Promise((resolve,reject)=> finalPromiseResolve = resolve);
     finalPromise.then(() => m.redraw())
 
-    const MILISEC_PER_DOT = 500;
+    const MILISEC_PER_DOT = 200;
     function wasteTimeStep() {
       setTimeout(() => {
         UI.il();
@@ -96,10 +98,51 @@ var UI = {
     return finalPromise;
   },
 
+  // yesOrNo.then((trueForYes) => {/*stuff*/})
+  yesOrNo: function() {
+    let finalPromiseResolve = null;
+    let promise = new Promise((resolve,reject) => finalPromiseResolve = resolve);
+
+    UI._states.disableAllInput = true;
+    UI.il();
+    let yesBt = UI.bt("Yes", () => {
+      UI._states.disableAllInput = false;
+      yesBt.forceEnable = noBt.forceEnable = false;
+      finalPromiseResolve(true);
+    });
+
+    UI.il();
+    let noBt = UI.bt("No", () => {
+      UI._states.disableAllInput = false;
+      yesBt.forceEnable = noBt.forceEnable = false;
+      finalPromiseResolve(false);
+    });
+
+    yesBt.forceEnable = noBt.forceEnable = true;
+    promise.then(() => m.redraw());
+
+    return promise;
+  },
+
+  anykey: function() {
+    UI.t("click anywhere to continue");
+    m.redraw();
+    let promise = new Promise((resolve,reject) => {
+      window.onclick = function() {
+        resolve();
+        window.onclick = null;
+      }
+    });
+    promise.then(() => m.redraw());
+
+    return promise;
+  },
+
   // getter
   list: function() {return UI._l},
   states: function() {return UI._states},
 };
+
 
 var Renderer = {
   //controller
@@ -130,7 +173,7 @@ var Renderer = {
           return m("button", {
             onclick: item.func,
             // style: "color:" + item.color,
-            disabled: UI.states().disableAllInput || !item.enableTest(),
+            disabled: (UI.states().disableAllInput || !item.enableTest()) && !item.forceEnable,
           },  item.name)
         },
         "textbox": (item) => {

@@ -19,6 +19,9 @@ var UI = {
     ele.isInline = UI._states.nextOneSameLine;
     UI._states.nextOneSameLine = false;
     UI._l.push(ele);
+
+    // hacky
+    m.redraw();
     return ele;
   },
 
@@ -125,12 +128,12 @@ var UI = {
   },
 
   anykey: function() {
-    UI.t("click anywhere to continue");
+    UI.t("Click anywhere to continue.");
     m.redraw();
     let promise = new Promise((resolve,reject) => {
-      window.onclick = function() {
+      window.onmousedown = function() {
         resolve();
-        window.onclick = null;
+        window.onmousedown = null;
       }
     });
     promise.then(() => m.redraw());
@@ -178,10 +181,10 @@ var Renderer = {
         },
         "textbox": (item) => {
           return m("input", {
-              type: "text",
-              oninput: m.withAttr("value", item.value),
-              value: item.value(),
-              disabled: UI.states().disableAllInput,
+            type: "text",
+            oninput: m.withAttr("value", item.value),
+            value: item.value(),
+            disabled: UI.states().disableAllInput,
           });
         }
       }[item.type];

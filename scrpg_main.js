@@ -1,15 +1,5 @@
-let GS = {
-  playerName: "Nameless"
-};
 
-let t = UI.t;
-let bt = UI.bt;
-let cls = UI.cls;
-let textBox = UI.textBox;
-let wasteTime = UI.wasteTime;
-let il = UI.il;
-let yesOrNo = UI.yesOrNo;
-let anykey = UI.anykey;
+
 
 function start (){
   cls()
@@ -42,10 +32,20 @@ function story(){
     return anykey();
   }).then(() => {
     t("done");
-    m.redraw();
   });
 }
 
-story();
+function menu() {
+  cls();
+
+  bt("Home", () => home());
+  bt("Internet Cafe", () => cafe());
+  bt("Pro Tour");
+  bt("University", () => uni());
+  bt("Mall", () => mall());
+}
+
+
+menu();
 //initialize
 m.mount(document.body, Renderer);

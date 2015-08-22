@@ -52,7 +52,7 @@ function uni() {
     })
   }
 
-
   t("");
   bt("Back", () => menu());
+  redraw();
 }

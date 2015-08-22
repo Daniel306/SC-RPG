@@ -5,6 +5,8 @@ function start (){
   cls()
   t("SC RPG")
   bt("New Game", () => name()).setEnableTest(() => true);
+
+  redraw();
 }
 
 function name(){
@@ -21,6 +23,8 @@ function name(){
   })
 
   bt("back", () => start())
+
+  redraw();
 }
 
 function story(){
@@ -44,16 +48,19 @@ function menu() {
   bt("University", () => uni());
   bt("Mall", () => mall());
 
-
   let gameTest = () => {
     battle("Lost Temple", [
       [generatePlayer(1), generatePlayer(1)], 
       [generatePlayer(1), generatePlayer(1)]
     ]).then((teamThatWon) => {
-      return wasteTime(1000)
+      t("");
+      t("Game has ended");
+      return anykey();
     }).then(() => menu())
   }
   bt("Test Battle", gameTest)
+
+  redraw();
 }
 
 menu();

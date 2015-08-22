@@ -20,8 +20,6 @@ var UI = {
     UI._states.nextOneSameLine = false;
     UI._l.push(ele);
 
-    // hacky
-    m.redraw();
     return ele;
   },
 
@@ -37,7 +35,7 @@ var UI = {
       color: c
     });
   },
-    
+
   // put a bt
   bt: function(name, func /* , c = "#000" */) {
     let bt = {
@@ -121,14 +119,15 @@ var UI = {
       finalPromiseResolve(false);
     });
 
+    
     yesBt.forceEnable = noBt.forceEnable = true;
-    promise.then(() => m.redraw());
-
+    // promise.then(() => m.redraw());
+    m.redraw();
     return promise;
   },
 
   anykey: function() {
-    UI.t("Click anywhere to continue.");
+    UI.t("Click anywhere to continue.", "#FD8A08");
     m.redraw();
     UI._states.disableAllInput = true;
 
@@ -139,8 +138,8 @@ var UI = {
         UI._states.disableAllInput = false;
       }
     });
-    promise.then(() => m.redraw());
-
+    // promise.then(() => m.redraw());
+    m.redraw();
     return promise;
   },
 

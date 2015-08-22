@@ -130,10 +130,13 @@ var UI = {
   anykey: function() {
     UI.t("Click anywhere to continue.");
     m.redraw();
+    UI._states.disableAllInput = true;
+
     let promise = new Promise((resolve,reject) => {
       window.onmousedown = function() {
         resolve();
         window.onmousedown = null;
+        UI._states.disableAllInput = false;
       }
     });
     promise.then(() => m.redraw());

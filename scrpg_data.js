@@ -38,7 +38,18 @@ let GS = {
 
 
 
+
+// try to pay for a task  (could be learning something, or even putting money in bank)
+let payFor = function(price, task){
+  if (GS.player.cash >= price){
+    GS.player.cash -= price;
+    task();
+  } else t("not enough cash");
+}
+
 exports.GS = GS;
+
+exports.payFor = payFor;
 
 })(window);
 

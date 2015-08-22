@@ -43,8 +43,18 @@ function menu() {
   bt("Pro Tour");
   bt("University", () => uni());
   bt("Mall", () => mall());
-}
 
+
+  let gameTest = () => {
+    battle("Lost Temple", [
+      [generatePlayer(1), generatePlayer(1)], 
+      [generatePlayer(1), generatePlayer(1)]
+    ]).then((teamThatWon) => {
+      return wasteTime(1000)
+    }).then(() => menu())
+  }
+  bt("Test Battle", gameTest)
+}
 
 menu();
 //initialize

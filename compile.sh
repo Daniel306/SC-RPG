@@ -7,6 +7,7 @@
         scrpg_uni.js\
         scrpg_mall.js\
         scrpg_cafe.js\
+        scrpg_combat.js\
         \
         scrpg_main.js \
 > out.js

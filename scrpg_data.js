@@ -13,10 +13,28 @@ let newCharacter = function(name, race, energy, skills, micro, macro, strat) {
   };
 };
 
-let newEnemy = function(reward, ...otherParams) {
+let newBoss = function(reward, ...otherParams) {
   var enemy = newCharacter(...otherParams);
   enemy.reward = reward;
   return player;
+};
+
+let generatePlayer = function(skill) {
+  var name = Util.randomPickFromArray(["randomUser", "noob_killer", "fishtastic",
+    "1337player", "LmFao_Master",
+    "Zergling", "I R The_KING", "allThyBase",
+    "Zeratul", "Cerebrate", "Overmind's mind",
+    "Jim Raynor", "MyBase4Aiur", "Weee_Master"]);
+
+  return newCharacter(
+    name,
+    Util.randomPickFromArray(["t", "p", "z"]), 
+    100, 
+    [Util.randint(skill * 7, skill * 14), Util.randint(skill * 7, skill * 14), Util.randint(skill * 7, skill * 14)],
+    Util.randint(skill * 7, skill * 14),
+    Util.randint(skill * 7, skill * 14),
+    Util.randint(skill * 7, skill * 14)
+  );
 };
 
 let newPlayer = function() {
@@ -50,6 +68,9 @@ let payFor = function(price, task){
 exports.GS = GS;
 
 exports.payFor = payFor;
+exports.GS = GS;
+
+exports.generatePlayer = generatePlayer;
 
 })(window);
 

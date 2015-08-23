@@ -4,7 +4,7 @@
 function start (){
   cls()
   t("SC RPG")
-  bt("New Game", () => name()).setEnableTest(() => true);
+  bt("New Game", () => name());
 
   redraw();
 }
@@ -15,10 +15,9 @@ function name(){
   let nameText = textBox();
   
   bt("Ok", () => {
-    GS.playerName = nameText();
+    GS.player.name = nameText();
     story()
   }).setEnableTest(() => {
-    console.log("foo");
     return nameText().length > 0;
   })
 
@@ -29,13 +28,15 @@ function name(){
 
 function story(){
   cls();
-
-  anykey().then(() => {
-    return anykey();
-  }).then(() => {
-    return anykey();
-  }).then(() => {
-    t("done");
+  vn(
+    GS.player.name + " was an ordinatry kid",
+    "Until one day...",
+    GS.player.name + " discovered a game call",
+    "\"Starcraft\"",
+    "At that moment " + GS.player.name + " discovered his true destiny",
+    GS.player.name + " swore to become the best Starcraft play in history",
+  ).then(() => {
+    menu();
   });
 }
 
@@ -48,21 +49,11 @@ function menu() {
   bt("University", () => uni());
   bt("Mall", () => mall());
 
-  let gameTest = () => {
-    battle("Lost Temple", [
-      [generatePlayer(1), generatePlayer(1)], 
-      [generatePlayer(1), generatePlayer(1)]
-    ]).then((teamThatWon) => {
-      t("");
-      t("Game has ended");
-      return anykey();
-    }).then(() => menu())
-  }
-  bt("Test Battle", gameTest)
-
   redraw();
 }
 
 menu();
+
 //initialize
 m.mount(document.body, Renderer);
+

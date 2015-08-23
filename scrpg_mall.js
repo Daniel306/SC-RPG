@@ -45,6 +45,8 @@ function mall() {
   
   t("")
   bt("Back", () => menu());
+
+  redraw();
 }
 
 function bank(){
@@ -91,4 +93,6 @@ function bank(){
   });
 
   bt("Back", () => mall());
+
+  redraw();
 }

@@ -99,36 +99,29 @@ var UI = {
     return finalPromise;
   },
 
-  // yesOrNo.then((trueForYes) => {/*stuff*/})
-  yesOrNo: function() {
+  getChoice: function(...choices) {
     let finalPromiseResolve = null;
     let promise = new Promise((resolve,reject) => finalPromiseResolve = resolve);
 
     UI._states.disableAllInput = true;
-    UI.il();
-    let yesBt = UI.bt("Yes", () => {
-      UI._states.disableAllInput = false;
-      yesBt.forceEnable = noBt.forceEnable = false;
-      finalPromiseResolve(true);
+
+    let buttons = choices.map((c, idx) => {
+      UI.il();
+      var bt =  UI.bt(c, () => {
+        UI._states.disableAllInput = false;
+        buttons.forEach((bt) => {bt.forceEnable = false});
+        finalPromiseResolve(idx);
+      });
+      bt.forceEnable = true;
+      return bt;
     });
 
-    UI.il();
-    let noBt = UI.bt("No", () => {
-      UI._states.disableAllInput = false;
-      yesBt.forceEnable = noBt.forceEnable = false;
-      finalPromiseResolve(false);
-    });
-
-    
-    yesBt.forceEnable = noBt.forceEnable = true;
-    // promise.then(() => m.redraw());
     m.redraw();
     return promise;
   },
 
   anykey: function() {
     UI.t("Click anywhere to continue.", "#FD8A08");
-    m.redraw();
     UI._states.disableAllInput = true;
 
     let promise = new Promise((resolve,reject) => {

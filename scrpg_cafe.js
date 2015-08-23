@@ -79,6 +79,7 @@ function cafe() {
       });
     });
 
+    t("");
     bt("Back", () => serverScreen());
     redraw();
   };

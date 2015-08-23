@@ -2,7 +2,7 @@
 
 // ct(color, "text to draw, text to draw #2")
 let ct = (c, ...texts) => {
-  UI.t (texts.join(), c);
+  UI.t (texts.join(""), c);
 };
 
 // t("test to draw", "text to draw #2".... etc)

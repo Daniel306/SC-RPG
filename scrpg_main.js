@@ -34,7 +34,7 @@ function story(){
     GS.player.name + " discovered a game call",
     "\"Starcraft\"",
     "At that moment " + GS.player.name + " discovered his true destiny",
-    GS.player.name + " swore to become the best Starcraft play in history",
+    GS.player.name + " swore to become the best Starcraft play in history"
   ).then(() => {
     menu();
   });

@@ -1,42 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width"/>
 
-<style>
-body {
-  font-family: "Lucida Console", Monaco, monospace
-}
+  <style>
+    body, input, button {
+      font-size: 1em;
+      font-family: "Lucida Console", Monaco, monospace;
+    }
 
-button {
-  margin: 2px 2px 2px 0px;
-  padding: 2px 10px;
-  font-size: 20px;
-  background-color: white;
-  border: 1px solid black;
-  outline: none;
-}
+    input {
+      padding: 0.1em;
+    }
 
-button:hover {
-  background-color: #CBECCA;
-}
+    button {
+      margin: 0.1em 0.2em 0.1em 0;
+      padding: 0.1em 0.5em;
+      background-color: white;
+      border: 1px solid black;
+      outline: none;
+    }
 
-button:active {
-  background-color: #AEC0AD;
-}
+    button:hover {
+      background-color: #CBECCA;
+    }
 
-</style>
+    button:active {
+      background-color: #AEC0AD;
+    }
+
+    button:disabled {
+      color: #ccc;
+    }
+
+  </style>
 </head>
 
 <body>
-        <script src="promise.js"></script>
-        <script src="mithril.js"></script>
-        <script src="lodash.js"></script>
-        <script src="util.js"></script>
-        <script src="out.js"></script>
-
-        <!-- <button disabled="true">Bagels</button> -->
+  <script src="promise.js"></script>
+  <script src="mithril.js"></script>
+  <script src="lodash.js"></script>
+  <script src="util.js"></script>
+  <script src="out.js"></script>
 </body>
 
 </html>

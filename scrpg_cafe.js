@@ -5,10 +5,10 @@ function cafe() {
     t("Would you like to get a PC for $10?");
     
     getChoice("Yes - pay $10", "Leave").then((c) => {
-      if (c == 1) {
-        return menu();
-      }
-      playGame();
+      [
+        () => payFor(10, playGame, menu),
+        () => menu()
+      ][c]();
     });
   };
 
@@ -66,10 +66,10 @@ function cafe() {
     cls();
     t("Available Games")
     t("");
-    ["1v1 noob only", "please be a noob", "1v1 python"].forEach((name) => {
+    ["1v1 noob only", "please be a noob", "1v1 python", "5v3 crazy computer", "BGHBGHBGH", "Sunken D - pro only"].forEach((name) => {
       bt(name, () => {
-        battle("Lost Temple", [
-          [GS.player, generatePlayer(1)], 
+        battle(name, [
+          [GS.player, generatePlayer(1)],
           [generatePlayer(1), generatePlayer(1)]
         ]).then((teamThatWon) => {
           t("");

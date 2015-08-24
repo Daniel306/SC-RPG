@@ -10,26 +10,28 @@ var UI = {
   // private
   _l: [],
   _states: {
-    timeToWaste: 0,
+    // TODO: kill this
     nextOneSameLine: false,
     disableAllInput: false,
   },
 
   _add: function(ele) {
     ele.isInline = UI._states.nextOneSameLine;
+    ele.visible = true;
     UI._states.nextOneSameLine = false;
     UI._l.push(ele);
 
     return ele;
   },
 
+  // TODO: kill this
   il: function() {
     UI._states.nextOneSameLine = true;
   },
 
   // put a text
   t: function(text, c = "#00F") {
-    UI._add({
+    return UI._add({
       type: "text",
       text: text,
       color: c
@@ -37,12 +39,11 @@ var UI = {
   },
 
   // put a bt
-  bt: function(name, func /* , c = "#000" */) {
+  bt: function(name, func) {
     let bt = {
       type: "button",
       name: name,
       func: func,
-      // color: c,
       enableTest: () => true,
       forceEnable: false,
     };
@@ -50,11 +51,13 @@ var UI = {
     return UI._add(bt);
   },
 
-  textBox: function(defaultText = "") {
+  // TODO: refactor to return UI._add, and add onkeydown event handler
+  textBox: function(defaultText = "", placeholder = "") {
     let text = m.prop(defaultText);
     UI._add({
       type: "textbox",
       value: text,
+      placeholder
     });
     return text;
   },
@@ -65,33 +68,30 @@ var UI = {
   },
 
   // wasteTime(millisec).then(A_function_to_call_after)
-  wasteTime: function(toWaste) {
-    if (UI._states.timeToWaste) {
-      console.log("already wasting time");
-      return new Promise(noop);
-    }
-
-    UI._states.timeToWaste += toWaste;
+  wasteTime: function(toWaste, showDot = true) {
+    let timeToWaste = toWaste;
     UI._states.disableAllInput = true;
+
     let finalPromiseResolve = null;
     let finalPromise = new Promise((resolve,reject)=> finalPromiseResolve = resolve);
     finalPromise.then(() => m.redraw())
 
-    const MILISEC_PER_DOT = 200;
+    const MILISEC_PER_DOT = Math.min(toWaste, 200);
     function wasteTimeStep() {
       setTimeout(() => {
-        UI.il();
-        UI.t(".");
+        if (showDot) {
+          UI.il();
+          UI.t(".");
+        }
         m.redraw();
 
-        UI._states.timeToWaste = Math.max(UI._states.timeToWaste - MILISEC_PER_DOT, 0);
-        if (UI._states.timeToWaste <= 0) {
+        timeToWaste = Math.max(timeToWaste - MILISEC_PER_DOT, 0);
+        if (timeToWaste <= 0) {
           finalPromiseResolve();
           UI._states.disableAllInput = false;
         } else {
           wasteTimeStep();
         }
-        
       }, MILISEC_PER_DOT);
     };
 
@@ -109,7 +109,10 @@ var UI = {
       UI.il();
       var bt =  UI.bt(c, () => {
         UI._states.disableAllInput = false;
-        buttons.forEach((bt) => {bt.forceEnable = false});
+        buttons.forEach((bt) => {
+          bt.forceEnable = false;
+          bt.visible = false;
+        });
         finalPromiseResolve(idx);
       });
       bt.forceEnable = true;
@@ -121,7 +124,7 @@ var UI = {
   },
 
   anykey: function() {
-    UI.t("Click anywhere to continue.", "#FD8A08");
+    var anyKeyText = UI.t("Click anywhere to continue.", "#FD8A08");
     UI._states.disableAllInput = true;
 
     let promise = new Promise((resolve,reject) => {
@@ -129,6 +132,7 @@ var UI = {
         resolve();
         window.onmousedown = null;
         UI._states.disableAllInput = false;
+        anyKeyText.visible = false;
       }
     });
     // promise.then(() => m.redraw());
@@ -145,21 +149,21 @@ var UI = {
 var Renderer = {
   //controller
   controller: function() {
-    var list = UI.list;
     return {
-      list: list,
+      list: UI.list,
     }
   },
 
   //view
   view: function(ctrl) {
     return m("div", [
-      ctrl.list().map(function(item, idx) {
+      ctrl.list().filter((item) => {
+        return item.visible;
+      }).map(function(item, idx) {
         return m(item.isInline ? "span":"div", [
           itemToM(item)
         ]);
       }),
-      // m("button", {onclick: ctrl.rotate}, "Rotate links")
     ]);
 
     function itemToM (item) {
@@ -177,6 +181,7 @@ var Renderer = {
         "textbox": (item) => {
           return m("input", {
             type: "text",
+            placeholder: item.placeholder,
             oninput: m.withAttr("value", item.value),
             value: item.value(),
             disabled: UI.states().disableAllInput,

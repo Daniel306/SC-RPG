@@ -54,41 +54,28 @@ function bank(){
   t("Enter how much you wish to deposit/withdraw");
   let moneyBox = textBox();
 
+  let validMoney = function(){
+    console.log("foo2")
+    return (!isNaN(moneyBox()) && moneyBox() != "" && moneyBox > 0);
+  }
+
+
   bt("Deposit", () => {
-    if (isNaN( moneyBox() ) || moneyBox() == "" ){
-      t("Not a number, please re-enter");
-    }else if (moneyBox() < 0){
-      t("Can't deposit negative ammount");
-    }else if ( GS.player.cash < parseInt(moneyBox()) ){
-      t("Not enough money to deposit this amount");
-    }else{ // finally!
-      t("Deposited $", moneyBox())
-      GS.player.cash -= parseInt(moneyBox());
-      GS.player.saving += parseInt(moneyBox());
-    }
-    anykey().then(() => {
-      bank();
-    }) // anykey  
-  });
+    GS.player.cash -= parseInt(moneyBox());
+    GS.player.saving += parseInt(moneyBox());
+    bank();
+  }).setEnableTest(() => {
+    return (validMoney() && moneyBox() <= GS.player.cash);
+  })
 
   il();
   
   bt("Withdraw", ()=> {
-    if (isNaN( moneyBox() ) || moneyBox() == ""){
-      t("not a number, please re-enter");
-    }else if (moneyBox() < 0){
-      t("can't withdraw negative ammount");
-    }else if ( GS.player.saving < parseInt(moneyBox()) ){
-      t("not enough money to deposit this amount");
-    }else{ // finally!
-      t("withdrew $", moneyBox())
-      GS.player.cash += parseInt(moneyBox());
-      GS.player.saving -= parseInt(moneyBox());
-    }
-    anykey().then(() => {
-        bank();
-    }) // anykey  
-  });
-
+    GS.player.cash += parseInt(moneyBox());
+    GS.player.saving -= parseInt(moneyBox());
+    bank();
+  }).setEnableTest(() => {
+    return (validMoney() && moneyBox() <= GS.player.saving)
+  })
   bt("Back", () => mall());
 }

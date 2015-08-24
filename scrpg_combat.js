@@ -48,12 +48,6 @@ function battle(map, teams) {
   // for clearTimeout
   let battleStepTimeoutId = null;
   let battleStep = function() {
-    let checkIfNaN = (p) => {
-      if (isNaN(p.troop) || isNaN(p.resource)) {
-        console.log("fuck");
-      }
-    };
-
     let roundTR = (p) => {
       p.resource = Math.max(0.0001, p.resource);
       p.troop = Math.max(0.00001, p.resource);
@@ -147,7 +141,7 @@ function battle(map, teams) {
     };
 
     cls();
-    bt(!!battleStepTimeoutId ? "Pause Game" : "Resume Game", () => {
+    let pauseBt = bt(!!battleStepTimeoutId ? "Pause Game" : "Resume Game", () => {
       if (!!battleStepTimeoutId) {
         clearTimeout(battleStepTimeoutId);
         log(GS.player.name + " has paused the game", "#88f");
@@ -159,7 +153,7 @@ function battle(map, teams) {
       }
     });
 
-    bt("Quit", () => {
+    let quitBt = bt("Quit", () => {
       if (!!battleStepTimeoutId) {
         clearTimeout(battleStepTimeoutId);
       }
@@ -167,6 +161,8 @@ function battle(map, teams) {
       renderBattle();
       promiseResolve(-1);
     });
+
+    pauseBt.inline = quitBt.inline = true;
 
     
     t(map + " " + timeText())

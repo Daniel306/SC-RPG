@@ -54,7 +54,6 @@ let GS = {
   player: newPlayer(),
 };
 
-
 // try to pay for a task  (could be learning something, or even putting money in bank)
 let payFor = function(price, task){
   if (GS.player.cash >= price){

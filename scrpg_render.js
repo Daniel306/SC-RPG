@@ -46,12 +46,11 @@ var UI = {
   // TODO: refactor to return UI._add, and add onkeydown event handler
   textBox: function(defaultText = "", placeholder = "") {
     let text = m.prop(defaultText);
-    UI._add({
+    return UI._add({
       type: "textbox",
       value: text,
       placeholder
     });
-    return text;
   },
 
   // clear

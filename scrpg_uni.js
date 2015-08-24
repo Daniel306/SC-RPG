@@ -27,7 +27,6 @@ function uni() {
 
   for (let x of [["t","Terran"],["p","Protoss"],["z", "Zerg"]]){
     bt("Study " + x[1] +" Build Order - $1", () => {
-      console.log(x);
       payFor(1, function(){ 
         cls();
         GS.player.skills[x[0]] += 1; 

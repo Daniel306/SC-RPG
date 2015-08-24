@@ -52,30 +52,34 @@ function mall() {
 function bank(){
   cls();
   t("You have $", GS.player.cash, " on hand");
-  t("  and $", GS.player.saving, " in your account")
-  t("Enter how much you wish to deposit/withdraw");
-  let moneyBox = textBox();
+  t("You have $", GS.player.saving, " in your account")
+  let moneyBox = textBox().value;
 
-  let validMoney = function(){
-    return (!isNaN(moneyBox()) && moneyBox() != "" && moneyBox > 0);
+  let validMoney = function() {
+    return (!isNaN(moneyBox()) && moneyBox() != "" && moneyBox() > 0);
   }
 
-  bt("Deposit", () => {
+  let deposit = bt("Deposit", () => {
     GS.player.cash -= parseInt(moneyBox());
     GS.player.saving += parseInt(moneyBox());
     bank();
-  }).setEnableTest(() => {
+  })
+  deposit.setEnableTest(() => {
     return (validMoney() && moneyBox() <= GS.player.cash);
   })
+  deposit.inline = true;
 
-  
-  bt("Withdraw", ()=> {
+  let withdraw = bt("Withdraw", ()=> {
     GS.player.cash += parseInt(moneyBox());
     GS.player.saving -= parseInt(moneyBox());
     bank();
-  }).setEnableTest(() => {
+  })
+  withdraw.setEnableTest(() => {
     return (validMoney() && moneyBox() <= GS.player.saving)
   })
+  withdraw.inline = true;
+
+  t("");
   bt("Back", () => mall());
 
   redraw();

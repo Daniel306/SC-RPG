@@ -1,13 +1,11 @@
-// the functiosn we are going to call
-
-// ct(color, "text to draw, text to draw #2")
-let ct = (c, ...texts) => {
-  UI.t (texts.join(""), c);
-};
-
-// t("test to draw", "text to draw #2".... etc)
+// t("test to draw", "text to draw #2"...)
 let t = (...texts) => {
   ct("#008", ...texts);
+};
+
+// ct(color, "text to draw", "text to draw #2"...)
+let ct = (c, ...texts) => {
+  UI.t (texts.join(""), c);
 };
 
 // bt("button name", onclick function)
@@ -22,8 +20,11 @@ let textBox = UI.textBox;
 // next ui element will be inline
 let il = UI.il;
 
-///////////////////////////////////////////////////////////
-// these functions below  will cause things to get redrawn
+/////////////////////////////////////////////////////////////
+// redraw is NOT automatic 
+// calling any of these functions below will trigger a redraw
+/////////////////////////////////////////////////////////////
+
 // redraws things
 let redraw = m.redraw;
 

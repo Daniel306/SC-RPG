@@ -12,7 +12,7 @@ function start (){
 function name(){
   cls();
   t("Who are you?")
-  let nameText = textBox();
+  let nameText = textBox("", "type name here");
   
   bt("Ok", () => {
     GS.player.name = nameText();
@@ -52,7 +52,7 @@ function menu() {
   redraw();
 }
 
-menu();
+start();
 
 //initialize
 m.mount(document.body, Renderer);

@@ -17,6 +17,7 @@ var UI = {
 
   _add: function(ele) {
     ele.isInline = UI._states.nextOneSameLine;
+    ele.visible = true;
     UI._states.nextOneSameLine = false;
     UI._l.push(ele);
 
@@ -29,7 +30,7 @@ var UI = {
 
   // put a text
   t: function(text, c = "#00F") {
-    UI._add({
+    return UI._add({
       type: "text",
       text: text,
       color: c
@@ -50,11 +51,13 @@ var UI = {
     return UI._add(bt);
   },
 
-  textBox: function(defaultText = "") {
+  // TODO: refactor to return UI._add
+  textBox: function(defaultText = "", placeholder = "") {
     let text = m.prop(defaultText);
     UI._add({
       type: "textbox",
       value: text,
+      placeholder
     });
     return text;
   },
@@ -109,7 +112,10 @@ var UI = {
       UI.il();
       var bt =  UI.bt(c, () => {
         UI._states.disableAllInput = false;
-        buttons.forEach((bt) => {bt.forceEnable = false});
+        buttons.forEach((bt) => {
+          bt.forceEnable = false;
+          bt.visible = false;
+        });
         finalPromiseResolve(idx);
       });
       bt.forceEnable = true;
@@ -121,7 +127,7 @@ var UI = {
   },
 
   anykey: function() {
-    UI.t("Click anywhere to continue.", "#FD8A08");
+    var anyKeyText = UI.t("Click anywhere to continue.", "#FD8A08");
     UI._states.disableAllInput = true;
 
     let promise = new Promise((resolve,reject) => {
@@ -129,6 +135,7 @@ var UI = {
         resolve();
         window.onmousedown = null;
         UI._states.disableAllInput = false;
+        anyKeyText.visible = false;
       }
     });
     // promise.then(() => m.redraw());
@@ -145,21 +152,21 @@ var UI = {
 var Renderer = {
   //controller
   controller: function() {
-    var list = UI.list;
     return {
-      list: list,
+      list: UI.list,
     }
   },
 
   //view
   view: function(ctrl) {
     return m("div", [
-      ctrl.list().map(function(item, idx) {
+      ctrl.list().filter((item) => {
+        return item.visible;
+      }).map(function(item, idx) {
         return m(item.isInline ? "span":"div", [
           itemToM(item)
         ]);
       }),
-      // m("button", {onclick: ctrl.rotate}, "Rotate links")
     ]);
 
     function itemToM (item) {
@@ -177,6 +184,7 @@ var Renderer = {
         "textbox": (item) => {
           return m("input", {
             type: "text",
+            placeholder: item.placeholder,
             oninput: m.withAttr("value", item.value),
             value: item.value(),
             disabled: UI.states().disableAllInput,

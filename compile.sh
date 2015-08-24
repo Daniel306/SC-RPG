@@ -9,6 +9,7 @@
         scrpg_cafe.js\
         scrpg_combat.js\
         scrpg_fate.js\
+        scrpg_level.js\
         \
         scrpg_main.js \
 > out.js

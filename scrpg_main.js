@@ -34,7 +34,7 @@ function story(){
     GS.player.name + " discovered a game called",
     "\"Starcraft\"",
     "At that moment " + GS.player.name + " discovered his true destiny",
-    GS.player.name + " swore to become the best Starcraft play in history"
+    GS.player.name + " swore to become the best Starcraft player in history"
   ).then(() => {
     menu();
   });
@@ -53,7 +53,8 @@ function menu() {
   redraw();
 }
 
-start();
+cafe();
+
 
 //initialize
 m.mount(document.body, Renderer);

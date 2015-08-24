@@ -1,10 +1,10 @@
-
-
-
 function start (){
   cls()
   t("SC RPG")
   bt("New Game", () => name());
+  bt("Load Game");
+  t("");
+  bt("Credits");
 
   redraw();
 }
@@ -31,7 +31,7 @@ function story(){
   vn(
     GS.player.name + " was an ordinatry kid",
     "Until one day...",
-    GS.player.name + " discovered a game call",
+    GS.player.name + " discovered a game called",
     "\"Starcraft\"",
     "At that moment " + GS.player.name + " discovered his true destiny",
     GS.player.name + " swore to become the best Starcraft play in history"
@@ -48,11 +48,12 @@ function menu() {
   bt("Pro Tour");
   bt("University", () => uni());
   bt("Mall", () => mall());
+  bt("Fate Zero Prologue", () => fate());
 
   redraw();
 }
 
-start();
+menu();
 
 //initialize
 m.mount(document.body, Renderer);

@@ -69,7 +69,7 @@ function cafe() {
     ["1v1 noob only", "please be a noob", "1v1 python", "5v3 crazy computer", "BGHBGHBGH", "Sunken D - pro only"].forEach((name) => {
       bt(name, () => {
         battle(name, [
-          [GS.player, generatePlayer(1)], 
+          [GS.player, generatePlayer(1)],
           [generatePlayer(1), generatePlayer(1)]
         ]).then((teamThatWon) => {
           t("");

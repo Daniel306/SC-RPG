@@ -1,11 +1,11 @@
 // t("test to draw", "text to draw #2"...)
 let t = (...texts) => {
-  ct("#008", ...texts);
+  return ct("#008", ...texts);
 };
 
 // ct(color, "text to draw", "text to draw #2"...)
 let ct = (c, ...texts) => {
-  UI.t (texts.join(""), c);
+  return UI.t (texts.join(""), c);
 };
 
 // bt("button name", onclick function)
@@ -28,7 +28,7 @@ let il = UI.il;
 // redraws things
 let redraw = m.redraw;
 
-// wasteTime(millisecs).then(function to call after wasteime is done)
+// wasteTime(millisecs, print_dot = true).then(function to call after wasteime is done)
 let wasteTime = UI.wasteTime;
 
 // getChoice("choice 1", "choice 2")
@@ -39,7 +39,7 @@ let getChoice = UI.getChoice;
 //   .then(function(0 for yes, 1 for no) {you write this})
 let yesOrNo = () => UI.getChoice("Yes", "No");
 
-// anyKey().then(function() {you write this})
+// anykey().then(function() {you write this})
 let anykey = UI.anykey;
 
 // visual novel style display of text
@@ -48,16 +48,29 @@ let vn = (...texts) => {
   let promiseResolve = null;
   let promise = new Promise((resolve) => promiseResolve = resolve);
 
-  let curTextIdx = 0;
+  let printSingleText = (line) => {
+    let words = line.split(" ").reverse();
 
-  let printSingleText = () => {
-    if (curTextIdx < texts.length) {
-      t(texts[curTextIdx++]);
-      anykey().then(printSingleText);
-    } else {
-      promiseResolve();
-    }
+    let curLine = t("");
+    let printWord = () => {
+      wasteTime(50, false).then(() => {
+        if (words.length) {
+          curLine.text += (" " + words.pop());
+          printWord();
+        } else {
+          anykey().then(() => {
+            if (texts.length)
+              printSingleText(texts.shift());
+            else
+              promiseResolve();
+          })
+        }
+      });
+    };
+    printWord();
   };
-  printSingleText();
+
+  printSingleText(texts.shift())
+
   return promise;
 };

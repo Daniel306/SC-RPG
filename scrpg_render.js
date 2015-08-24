@@ -10,7 +10,7 @@ var UI = {
   // private
   _l: [],
   _states: {
-    timeToWaste: 0,
+    // TODO: kill this
     nextOneSameLine: false,
     disableAllInput: false,
   },
@@ -24,6 +24,7 @@ var UI = {
     return ele;
   },
 
+  // TODO: kill this
   il: function() {
     UI._states.nextOneSameLine = true;
   },
@@ -38,12 +39,11 @@ var UI = {
   },
 
   // put a bt
-  bt: function(name, func /* , c = "#000" */) {
+  bt: function(name, func) {
     let bt = {
       type: "button",
       name: name,
       func: func,
-      // color: c,
       enableTest: () => true,
       forceEnable: false,
     };
@@ -51,7 +51,7 @@ var UI = {
     return UI._add(bt);
   },
 
-  // TODO: refactor to return UI._add
+  // TODO: refactor to return UI._add, and add onkeydown event handler
   textBox: function(defaultText = "", placeholder = "") {
     let text = m.prop(defaultText);
     UI._add({
@@ -68,33 +68,30 @@ var UI = {
   },
 
   // wasteTime(millisec).then(A_function_to_call_after)
-  wasteTime: function(toWaste) {
-    if (UI._states.timeToWaste) {
-      console.log("already wasting time");
-      return new Promise(noop);
-    }
-
-    UI._states.timeToWaste += toWaste;
+  wasteTime: function(toWaste, showDot = true) {
+    let timeToWaste = toWaste;
     UI._states.disableAllInput = true;
+
     let finalPromiseResolve = null;
     let finalPromise = new Promise((resolve,reject)=> finalPromiseResolve = resolve);
     finalPromise.then(() => m.redraw())
 
-    const MILISEC_PER_DOT = 200;
+    const MILISEC_PER_DOT = Math.min(toWaste, 200);
     function wasteTimeStep() {
       setTimeout(() => {
-        UI.il();
-        UI.t(".");
+        if (showDot) {
+          UI.il();
+          UI.t(".");
+        }
         m.redraw();
 
-        UI._states.timeToWaste = Math.max(UI._states.timeToWaste - MILISEC_PER_DOT, 0);
-        if (UI._states.timeToWaste <= 0) {
+        timeToWaste = Math.max(timeToWaste - MILISEC_PER_DOT, 0);
+        if (timeToWaste <= 0) {
           finalPromiseResolve();
           UI._states.disableAllInput = false;
         } else {
           wasteTimeStep();
         }
-        
       }, MILISEC_PER_DOT);
     };
 

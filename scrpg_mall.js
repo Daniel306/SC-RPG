@@ -45,6 +45,8 @@ function mall() {
   
   t("")
   bt("Back", () => menu());
+
+  redraw();
 }
 
 function bank(){
@@ -78,4 +80,6 @@ function bank(){
     return (validMoney() && moneyBox() <= GS.player.saving)
   })
   bt("Back", () => mall());
+
+  redraw();
 }

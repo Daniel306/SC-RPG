@@ -10,23 +10,15 @@ var UI = {
   // private
   _l: [],
   _states: {
-    // TODO: kill this
-    nextOneSameLine: false,
     disableAllInput: false,
   },
 
   _add: function(ele) {
-    ele.isInline = UI._states.nextOneSameLine;
     ele.visible = true;
-    UI._states.nextOneSameLine = false;
+    ele.inline = !!ele.inline;
     UI._l.push(ele);
 
     return ele;
-  },
-
-  // TODO: kill this
-  il: function() {
-    UI._states.nextOneSameLine = true;
   },
 
   // put a text
@@ -80,8 +72,8 @@ var UI = {
     function wasteTimeStep() {
       setTimeout(() => {
         if (showDot) {
-          UI.il();
-          UI.t(".");
+          let dot = UI.t(".");
+          dot.inline = true;
         }
         m.redraw();
 
@@ -106,8 +98,7 @@ var UI = {
     UI._states.disableAllInput = true;
 
     let buttons = choices.map((c, idx) => {
-      UI.il();
-      var bt =  UI.bt(c, () => {
+      let bt =  UI.bt(c, () => {
         UI._states.disableAllInput = false;
         buttons.forEach((bt) => {
           bt.forceEnable = false;
@@ -115,6 +106,7 @@ var UI = {
         });
         finalPromiseResolve(idx);
       });
+      bt.inline = true;
       bt.forceEnable = true;
       return bt;
     });
@@ -160,7 +152,7 @@ var Renderer = {
       ctrl.list().filter((item) => {
         return item.visible;
       }).map(function(item, idx) {
-        return m(item.isInline ? "span":"div", [
+        return m(item.inline ? "span":"div", [
           itemToM(item)
         ]);
       }),

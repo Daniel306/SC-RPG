@@ -147,7 +147,6 @@ function battle(map, teams) {
     };
 
     cls();
-    il();
     bt(!!battleStepTimeoutId ? "Pause Game" : "Resume Game", () => {
       if (!!battleStepTimeoutId) {
         clearTimeout(battleStepTimeoutId);
@@ -160,7 +159,6 @@ function battle(map, teams) {
       }
     });
 
-    il();
     bt("Quit", () => {
       if (!!battleStepTimeoutId) {
         clearTimeout(battleStepTimeoutId);

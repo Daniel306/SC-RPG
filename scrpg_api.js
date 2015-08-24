@@ -17,9 +17,6 @@ let cls = UI.cls;
 // read the code
 let textBox = UI.textBox;
 
-// next ui element will be inline
-let il = UI.il;
-
 /////////////////////////////////////////////////////////////
 // redraw is NOT automatic 
 // calling any of these functions below will trigger a redraw

@@ -57,10 +57,8 @@ function bank(){
   let moneyBox = textBox();
 
   let validMoney = function(){
-    console.log("foo2")
     return (!isNaN(moneyBox()) && moneyBox() != "" && moneyBox > 0);
   }
-
 
   bt("Deposit", () => {
     GS.player.cash -= parseInt(moneyBox());
@@ -70,7 +68,6 @@ function bank(){
     return (validMoney() && moneyBox() <= GS.player.cash);
   })
 
-  il();
   
   bt("Withdraw", ()=> {
     GS.player.cash += parseInt(moneyBox());

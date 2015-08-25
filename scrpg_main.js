@@ -114,6 +114,6 @@ function loadScreen(){
   redraw();
 }
 
-home();
+start();
 m.mount(document.body, Renderer);
 

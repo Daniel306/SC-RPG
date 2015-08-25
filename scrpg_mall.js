@@ -1,46 +1,9 @@
 
 function mall() {
   cls();
-  t("you have ", GS.player.cash, " money")
+  t("you have $", GS.player.cash)
   bt("Hardware");
-  bt("Beg for money", () => {
-    if (GS.player.energy < 10){
-      t("too tired to go beg")
-      return;
-    }
-  
-    GS.player.energy-=10;
-    wasteTime(3000).then(() => {
-      let rand = Math.random()
-      if (rand > 0.4){ // small gain
-        t("You got $10")
-        GS.player.cash += 10;
-      } else if (rand > 0.25){ // huge gain, small chance
-        let amount = Math.round(Math.random()*40 + 20)
-        t("What luck! a SC enthusiast gives you $", amount)
-        GS.player.cash += amount;
-      } else if (rand > 0.15){
-        t("Nothing happpens, nobody wants to give you money")
-      } else {
-        let amount = Math.round(Math.min(Math.random()*100, GS.player.cash));
-        if (amount == GS.player.cash){
-          t("You got robbed of all you had")
-          t("Robbers wanted more, so they got mad and punced you")
-          GS.player.energy = Math.max(GS.player.energy-10, 0);
-          GS.player.cash = 0;
-        } else {
-          t("You got robbed of $", amount);
-          t("The robbers leave happily")
-          GS.player.cash -= amount;
-        }
-        t("You should probably use a bank");
-      } // if
-      anykey().then(() => {
-        mall();
-      }) // anykey
-    }) // wasteTime
-  }); // bt
-
+  bt("Beg for money", () => beg());
   bt("Go to the bank", () => bank());
   
   t("")
@@ -82,5 +45,72 @@ function bank(){
   t("");
   bt("Back", () => mall());
 
+  redraw();
+}
+
+function beg(){
+  cls();
+  
+  let bitOfMoney = function(){
+    let amount = Util.randint(5, 10);
+    GS.player.cash += amount;
+    vn("A kind person gives you $" + amount + " for food",
+      "but it's obviously going to be spent on starcraft").then(beg);
+  }
+
+  let lotsOfMoney = function(){
+    let amount = Util.randint(30, 50);
+    GS.player.cash += amount;
+    vn("A rich person gives you $" + amount + " for groceries",
+      "but it's obviously going to be spent on starcraft").then(beg);
+  }
+
+  let bitOfFood = function(){
+    let gain = Math.min(GS.player.maxEnergy - GS.player.energy, 20);
+    GS.player.energy += gain;
+    vn("A kind person gives you a sandwich",
+        "It is delicious",
+        "You recover " + gain + " energy").then(beg);
+  }
+
+  let SCFan = function(){
+    let amount =  Util.randint(5, 10);
+    GS.player.cash += amount;
+    vn("A kind starcraft fan takes you up on the offer",
+       "after playing starcraft for him, he gives you a red bull and $" 
+        + amount).then(beg);
+  }
+
+  let SCHater = function(){
+     let loss = Math.min(GS.player.energy, 20);
+     GS.player.energy = GS.player.energy - loss;
+     vn("An evil starcraft hater calls you a noob",
+       "tells you to play Call of Duty instead",
+       "Then kicks you",
+       "It hurts",
+       "You lose " + loss + " energy").then(beg);
+  }
+
+  let useSign = function(List){
+    console.log(GS.player.energy);
+    if (GS.player.energy < 10){
+      t("You are too tired to beg")
+      anykey().then(beg);
+    }else{
+      GS.player.energy -= 10;
+      wasteTime(500).then(Util.randomPickProbList(List))
+    }
+  }
+
+  t("Choose your sign");
+  bt("I hunger, Please food",  
+      () => useSign([bitOfMoney, 2, bitOfFood, 3, lotsOfMoney, 1]));
+
+  bt("Will play SC for food", 
+      () => useSign([bitOfMoney, 2, bitOfFood, 2,  
+                      SCFan, 3, SCHater, 3]));
+
+  bt("Back", () => mall());
+  
   redraw();
 }

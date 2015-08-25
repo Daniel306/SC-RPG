@@ -53,8 +53,8 @@ function menu() {
   redraw();
 }
 
-start();
-
+//start();
+mall();
 //initialize
 m.mount(document.body, Renderer);
 

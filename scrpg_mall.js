@@ -1,16 +1,3 @@
-function gameMenu(backTo, fcn) {
-  return () => {
-    cls();
-
-    let returnVal = fcn();
-
-    t("");
-    bt("Back", backTo);
-    redraw();
-    return returnVal;    
-  }
-};
-
 let mall = gameMenu(menu, () => {
   t("You have $", GS.player.cash)
   t("");
@@ -48,7 +35,6 @@ function makeSellItemScreen (backTo, itemData) {
       }));      
 
     }
-
   });
 };
 

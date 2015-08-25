@@ -1,7 +1,7 @@
-function start (){
+function start() {
   cls()
   t("SC RPG")
-  bt("New Game", () => name());
+  bt("New Game", getPlayerName);
   bt("Load Game", loadScreen);
   t("");
   bt("Credits");
@@ -9,8 +9,7 @@ function start (){
   redraw();
 }
 
-function name(){
-  cls();
+let getPlayerName = gameMenu(start, () => {
   t("Who are you?")
   let nameText = textBox("", "type name here").value;
   
@@ -20,16 +19,12 @@ function name(){
   }).setEnableTest(() => {
     return nameText().length > 0;
   })
-
-  bt("back", () => start())
-
-  redraw();
-}
+});
 
 function story(){
-  let race = ["Terran", "Protoss", "Zerg"];
-
   cls();
+
+  let race = ["Terran", "Protoss", "Zerg"];
   vn(
     GS.player.name + " was an ordinatry kid",
     "Until one day...",
@@ -87,14 +82,12 @@ function menu() {
   redraw();
 }
 
-function loadScreen(){
-  cls();
-
+let loadScreen = gameMenu(start, () => {
   function loadSlot(i){
-    if (localStorage["GS" + i] == undefined){
+    if (localStorage["GS" + i] == undefined) {
       t("empty slot, nothing to load");
       anykey().then(loadScreen);
-    }else{
+    } else {
       GS = JSON.parse(localStorage["GS" + i]);
       t("loaded succesfully")
       anykey().then(menu);
@@ -110,9 +103,7 @@ function loadScreen(){
     }
     bt(name, ()=>loadSlot(i));
   }
-  bt("Back", start);
-  redraw();
-}
+});
 
 start();
 m.mount(document.body, Renderer);

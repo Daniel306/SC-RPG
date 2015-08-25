@@ -14,6 +14,7 @@ function checkLevelUp() {
 
   if (levelBefore != p.level) {
     let levelGain = p.level - levelBefore;
+    cls();
     t("Level Up!")
     t("Level " + levelBefore + " -> " + p.level);
 

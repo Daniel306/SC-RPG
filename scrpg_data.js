@@ -2,7 +2,7 @@
 
 let expNeededPerStatPoint = (x) => {
   var exp = 50 + 10 * x + Math.pow(1.17, x);
-  return Math.round(exp);
+  return Math.round(exp/2);
 };
 
 let levelToExpFormula = (x) => {
@@ -16,7 +16,7 @@ let levelToExpFormula = (x) => {
 
 let opponentToExp = (e) => {
   let x = e.micro + e.macro + e.strat;
-  var top = expNeededPerStatPoint(x);
+  var top = expNeededPerStatPoint(x) * 2;
   var bot = 5+ 0.5*x / Math.log(x+5);
   return Math.round(top/bot);
 };

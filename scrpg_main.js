@@ -51,7 +51,7 @@ function story(){
       "After selling everything, " + GS.player.name + " travels to Seoul",
       "The captital of Korea, and the home of the best Starcraft players"
     )
-  }).then(() => wasteTime(1000)).then({
+  }).then(() => wasteTime(1000)).then(() =>{
     t("");
     t("And so the journey begins");
     anykey().then(menu);

@@ -74,6 +74,7 @@ function home() {
 
   bt("Inventory", inventory);
   bt("Sleep", sleep);
+  bt("Save", saveScreen);
   t("")
   bt("Back", () => menu());
   
@@ -81,7 +82,7 @@ function home() {
 };
 
 function saveScreen(){
-  cls
+  cls();
 
   // First, read the saves to see if they are empty
   function saveSlot(i){
@@ -91,15 +92,17 @@ function saveScreen(){
     anykey().then(saveScreen);
   }
   //Choose save slot:
-  for (let i = 1; i < 4; i++){
-    let S = JSON.parse(localStorage["GS" + i]);
-    if (S == null){
-      let name = "empty slot";
+  for (let i = 1; i <  4; i++){
+    let name = "empty slot"
+    if (localStorage["GS" + i] == undefined){
+      //noop
     }else{
-      let name = S.player.name + " - level " + S.player.level; 
+      let S = JSON.parse(localStorage["GS" + i]);
+      name = S.player.name + " - level " + S.player.level; 
     }
-    bt(name, () => this.saveSlot(i))
+    bt(name, () => saveSlot(i));
   }
+  bt("back home", home);
 
-
+  redraw();
 }

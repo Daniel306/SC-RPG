@@ -83,26 +83,31 @@ function menu() {
 }
 
 let loadScreen = gameMenu(start, () => {
+  
   function loadSlot(i){
     if (localStorage["GS" + i] == undefined) {
+      cls();
       t("empty slot, nothing to load");
       anykey().then(loadScreen);
     } else {
       GS = JSON.parse(localStorage["GS" + i]);
+      cls();
       t("loaded succesfully")
       anykey().then(menu);
-    }
-    
+    }  
   }
+
   t("Choose save slot to load:")
   for (let i = 1; i < 4; i++){
-    let name = "empty slot"
+    let name = "Slot " + i + ": empty slot"
     if (localStorage["GS" + i] != undefined){
       let S = JSON.parse(localStorage["GS" + i]);
-      name = S.player.name + " - level " + S.player.level; 
+      name = "Slot" + i + ": " + S.player.name 
+              + " - level " + S.player.level; 
     }
     bt(name, ()=>loadSlot(i));
   }
+    
 });
 
 start();

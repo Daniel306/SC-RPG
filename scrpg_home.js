@@ -84,14 +84,13 @@ function home() {
 let saveScreen = gameMenu(home, () => {
   function saveSlot(i){
     if (localStorage["GS" + i] != undefined){
-      t("Are you sure? Save slot " +i + " has a save already")
+      t("Are you sure? Save slot " + i + " has a save already")
       yesOrNo().then((no) => {
         if (no) {
-          anykey().then(saveScreen);
+          saveScreen();
         }else{
           localStorage["GS" + i] = JSON.stringify(GS);
-          t("Saved in slot " + i);
-          anykey().then(saveScreen);
+          saveScreen();
         }
       })
     } else {
@@ -103,10 +102,11 @@ let saveScreen = gameMenu(home, () => {
 
   t("Choose a save slot:")
   for (let i = 1; i <  4; i++) {
-    let name = "empty slot"
+    let name = "Slot " + i + ": empty slot"
     if (localStorage["GS" + i] != undefined){
       let S = JSON.parse(localStorage["GS" + i]);
-      name = S.player.name + " - level " + S.player.level; 
+      name = "Slot " + i + ": " + S.player.name 
+              + " - level " + S.player.level; 
     }
     bt(name, () => saveSlot(i));
   }

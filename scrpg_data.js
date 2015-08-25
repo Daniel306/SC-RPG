@@ -63,7 +63,7 @@ let generatePlayer = function(skill) {
 };
 
 let newPlayer = function() {
-  let player = newCharacter("nameless", "t", 20, [0,0,0], 5, 5, 5);
+  let player = newCharacter("nameless", "t", 100, [0,0,0], 5, 5, 5);
   _.extend(player, {
     level: 1,
     exp: 0,
@@ -73,6 +73,7 @@ let newPlayer = function() {
     saving: 0,
     statPoints: 0,
     racePoints: 0,
+    inventory: ["cofee", "tea", "coffee"],
   });
   return player;
 };

@@ -1,6 +1,7 @@
  babel \
         scrpg_render.js \
         scrpg_api.js \
+        scrpg_data_item.js \
         scrpg_data.js \
         \
         scrpg_home.js\

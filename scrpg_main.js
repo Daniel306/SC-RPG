@@ -53,7 +53,7 @@ function menu() {
   redraw();
 }
 
-cafe();
+menu();
 
 
 //initialize

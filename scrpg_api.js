@@ -71,3 +71,20 @@ let vn = (...texts) => {
 
   return promise;
 };
+
+/////////////////////////////////////////////////////////////
+// Other helper functions
+/////////////////////////////////////////////////////////////
+
+function gameMenu(backTo, fcn) {
+  return () => {
+    cls();
+
+    let returnVal = fcn();
+
+    t("");
+    bt("Back", backTo);
+    redraw();
+    return returnVal;    
+  }
+};

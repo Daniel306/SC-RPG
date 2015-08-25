@@ -1,6 +1,8 @@
 // random useful functions that *COULD* be abstracted and organized for future projects
 
 var Util = {};
+var U = Util;
+
 Math.r = Math.random;
 
 _.extend(Util, {
@@ -103,5 +105,17 @@ _.extend(Util, {
   },
   randint: function(lo, hi) {
     return Math.floor(Util.rand(lo, hi));
+  },
+
+  noop: () => {},
+
+  promising: () => {
+    return (...args) => {
+      let resolve = null;
+      let promise = new Promise((_resolve,reject)=> resolve = _resolve);
+
+      fcn(resolve, ...args);
+      return promise;    
+    }
   }
 });

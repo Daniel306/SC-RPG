@@ -43,7 +43,7 @@ function home() {
     let sleepFlavourText = [
       "zzzzz",
       "zZZZZzzzz",
-      "\"not enough mineral\"",
+      "\"not enough minerals\"",
       "omg zerg rush!",
       "you must construct additional pylons",
       "* nuclear launch detected *",
@@ -81,9 +81,7 @@ function home() {
   redraw();
 };
 
-function saveScreen(){
-  cls();
-
+let saveScreen = gameMenu(home, () => {
   function saveSlot(i){
     if (localStorage["GS" + i] != undefined){
       t("Are you sure? Save slot " +i + " has a save already")
@@ -96,7 +94,7 @@ function saveScreen(){
           anykey().then(saveScreen);
         }
       })
-    }else{
+    } else {
       localStorage["GS" + i] = JSON.stringify(GS);
       t("saved in slot " + i);
       anykey().then(saveScreen);
@@ -104,7 +102,7 @@ function saveScreen(){
   }
 
   t("Choose a save slot:")
-  for (let i = 1; i <  4; i++){
+  for (let i = 1; i <  4; i++) {
     let name = "empty slot"
     if (localStorage["GS" + i] != undefined){
       let S = JSON.parse(localStorage["GS" + i]);
@@ -112,7 +110,4 @@ function saveScreen(){
     }
     bt(name, () => saveSlot(i));
   }
-  bt("Back", home);
-
-  redraw();
-}
+});

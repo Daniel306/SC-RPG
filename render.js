@@ -4,8 +4,6 @@ console.log(foo);
 */
 //model
 
-var noop = () => {};
-
 var UI = {
   // private
   _l: [],

@@ -56,14 +56,12 @@ var UI = {
     UI._l = [];
   },
 
-  // wasteTime(millisec).then(A_function_to_call_after)
   wasteTime: function(toWaste, showDot = true) {
     let timeToWaste = toWaste;
     UI._states.disableAllInput = true;
 
     let finalPromiseResolve = null;
     let finalPromise = new Promise((resolve,reject)=> finalPromiseResolve = resolve);
-    finalPromise.then(() => m.redraw())
 
     const MILISEC_PER_DOT = Math.min(toWaste, 200);
     function wasteTimeStep() {

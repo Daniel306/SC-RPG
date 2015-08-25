@@ -1,7 +1,5 @@
 
-function uni() {
-  cls();
-
+let uni = gameMenu(menu, () => {
   bt("Take an Exam", () => {
     cls();
     t("Taking test");
@@ -50,8 +48,4 @@ function uni() {
       });
     })
   }
-
-  t("");
-  bt("Back", () => menu());
-  redraw();
-}
+});

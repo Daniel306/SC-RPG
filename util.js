@@ -107,15 +107,5 @@ _.extend(Util, {
     return Math.floor(Util.rand(lo, hi));
   },
 
-  noop: () => {},
-
-  promising: () => {
-    return (...args) => {
-      let resolve = null;
-      let promise = new Promise((_resolve,reject)=> resolve = _resolve);
-
-      fcn(resolve, ...args);
-      return promise;    
-    }
-  }
+  noop: () => {}
 });

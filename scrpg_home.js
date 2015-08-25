@@ -86,13 +86,13 @@ function saveScreen(){
 
   function saveSlot(i){
     if (localStorage["GS" + i] != undefined){
-      t("are you sure? this save slot has a save already")
+      t("Are you sure? Save slot " +i + " has a save already")
       yesOrNo().then((no) => {
         if (no) {
           anykey().then(saveScreen);
         }else{
           localStorage["GS" + i] = JSON.stringify(GS);
-          t("saved in slot " + i);
+          t("Saved in slot " + i);
           anykey().then(saveScreen);
         }
       })

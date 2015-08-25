@@ -53,6 +53,6 @@ function menu() {
   redraw();
 }
 
-menu();
+home();
 m.mount(document.body, Renderer);
 

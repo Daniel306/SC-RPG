@@ -24,14 +24,14 @@ function foodShop() {
     let itemBt = bt(name, () => {
       cls();
       displayItemData(itemData);
-      bt("Buy for $" + itemData.price, () => payFor(itemData.price, () => {
+      bt("Buy for $" + itemData.price, () => takeMoney(itemData.price, () => {
         cls();
         t("You purchased " + name);
         anykey().then(foodShop);
         GS.player.inventory.push(name);
       }));
 
-      bt("Buy for $" + itemData.price + " and Consume Immediately", () => payFor(itemData.price, () => {
+      bt("Buy for $" + itemData.price + " and Consume Immediately", () => takeMoney(itemData.price, () => {
         cls();
         t("You purchased " + itemData.name + ".");
         consumeItem(itemData)
@@ -106,14 +106,13 @@ function beg(){
   }
 
   let bitOfFood = function(){
-    let gain = Math.min(GS.player.maxEnergy - GS.player.energy, 20);
-    GS.player.energy += gain;
+    let gain = giveEnergy(20);
     return vn("A kind person gives you a sandwich",
         "It is delicious",
         "You recover " + gain + " energy");
   }
 
-  let SCFan = function(){
+  let SCFan = function() {
     let amount =  Util.randint(5, 10);
     GS.player.cash += amount;
     return vn("A kind starcraft fan takes you up on the offer",
@@ -122,24 +121,23 @@ function beg(){
   }
 
   let SCHater = function(){
-     let loss = Math.min(GS.player.energy, 20);
-     GS.player.energy = GS.player.energy - loss;
-     return vn("An evil starcraft hater calls you a noob",
-       "tells you to play Call of Duty instead",
-       "Then kicks you",
-       "It hurts",
-       "You lose " + loss + " energy");
+    takeEnergy(Math.min(GS.player.energy, 20), (loss) => {
+      return vn("An evil starcraft hater calls you a noob",
+        "tells you to play Call of Duty instead",
+        "Then kicks you",
+        "It hurts",
+        "You lose " + loss + " energy");      
+    })
   }
 
   let useSign = function(List){
-    if (GS.player.energy < 10){
+    takeEnergy(10, () => {
       t("You are too tired to beg")
-      anykey().then(beg);
-    }else{
-      GS.player.energy -= 10;
+      return anykey().then(beg);
+    }, () => {
       cls();
-      wasteTime(500).then(Util.randomPickProbList(List)).then(beg);
-    }
+      return wasteTime(500).then(Util.randomPickProbList(List)).then(beg);
+    });
   }
 
   t("Choose your begging sign");

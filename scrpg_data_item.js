@@ -1,10 +1,5 @@
 (function(exports) {
 
-
-let giveEnergy = (toGive) => {
-  GS.player.energy = Math.min(GS.player.energy + toGive, GS.player.maxEnergy);
-}
-
 let ITEM_DATA = [
   {name: "tea",      type:"c",  price: 8,  desc: "A drink for real men. gives 20 energy"      , effect: ()=>giveEnergy(20)},
   {name: "coffee",   type:"c",  price: 20, desc: "Perfectly roasted, gives 40 energy"         , effect: ()=>giveEnergy(40)},

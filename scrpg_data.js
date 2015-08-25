@@ -88,24 +88,47 @@ let getTime = () => {
   return new Date(startTime + GS.time * 1000);
 };
 
-// try to pay for a task  (could be learning something, or even putting money in bank)
-let payFor = function(price, task, cantPay){
+// try to pay for a task
+let takeMoney = function(price, onEnough, onNotEnough){
   if (GS.player.cash >= price){
     GS.player.cash -= price;
-    task();
+    onEnough();
   } else {
     t("Not enough cash")
-    if (cantPay) {
-      cantPay();
+    if (onNotEnough) {
+      onNotEnough();
     }
   };
 }
+let takeEnergy = function(energy, onEnough, noNotEnough) {
+  if (GS.player.energy >= energy) {
+    GS.player.energy -= energy;
+    if (onEnough)
+      return onEnough(energy);
+  } else {
+    if (onNotEnough)
+      return noNotEnough(energy);
+  }
+}
+// returns amount given
+let giveEnergy = (toGive) => {
+  let gain = Math.min(GS.player.maxEnergy - GS.player.energy, toGive);
+  GS.player.energy += gain;
+  return gain;
+}
 
-exports.payFor = payFor;
 exports.GS = GS;
-exports.generatePlayer = generatePlayer;
+
+exports.takeMoney = takeMoney;
+
+exports.takeEnergy = takeEnergy;
+exports.giveEnergy = giveEnergy;
+
 exports.levelToExpFormula = levelToExpFormula;
 exports.opponentToExp = opponentToExp;
+
+exports.generatePlayer = generatePlayer;
+
 exports.getTime = getTime;
 
 })(window);

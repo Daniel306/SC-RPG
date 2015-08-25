@@ -47,14 +47,13 @@ function story(){
     cls();
     GS.player.race = ["t", "p", "z"][c];
     return vn(
-      GS.player.name + " have chosen to be a " + race[c] + " player!",
+      GS.player.name + " decided to be a " + race[c] + " player!",
       "After selling everything, " + GS.player.name + " travels to Seoul",
-      "The captital of Korea, and the home of best Starcraft players"
+      "The captital of Korea, and the home of the best Starcraft players"
     )
-  }).then(() => {
+  }).then(() => wasteTime(1000)).then({
     t("");
-    t("");
-    t("And so it begins");
+    t("And so the journey begins");
     anykey().then(menu);
   });
 }

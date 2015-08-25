@@ -7,7 +7,7 @@ function cafe() {
     
     getChoice("Yes - pay $10", "Leave").then((c) => {
       [
-        () => payFor(10, 
+        () => takeMoney(10, 
           () => {t("You paid $10"); anykey().then(playGame)},
           () => anykey().then(menu)
         ),

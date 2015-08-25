@@ -1,6 +1,5 @@
-function home() {
-  let itemScreen = function(idx, itemData) {
-    cls();
+let home = gameMenu(menu, () => {
+  let itemScreen = gameMenu(inventory, (idx, itemData) => {
     displayItemData(itemData);
     
     bt("Use", () => {
@@ -10,13 +9,9 @@ function home() {
         .then(anykey)
         .then(inventory);
     });
+  });
 
-    bt("Back", inventory);
-    redraw();
-  };
-
-  let inventory = function() {
-    cls();
+  let inventory = gameMenu(home, () => {
     t("Inventory");
 
     GS.player.inventory.forEach((itemName, idx) => {
@@ -30,12 +25,7 @@ function home() {
     if (GS.player.inventory.length == 0) {
       t("You have nothing in your inventory");
     }
-
-    t("")
-    bt("Back", () => home());
-
-    redraw();
-  };
+  });
 
   let sleep = function() {
     cls();
@@ -75,11 +65,7 @@ function home() {
   bt("Inventory", inventory);
   bt("Sleep", sleep);
   bt("Save", saveScreen);
-  t("")
-  bt("Back", () => menu());
-  
-  redraw();
-};
+});
 
 let saveScreen = gameMenu(home, () => {
   function saveSlot(i){

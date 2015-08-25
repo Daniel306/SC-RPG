@@ -58,20 +58,14 @@ function cafe() {
     })
   };
 
-  let serverScreen = () => {
-    cls();
+  let serverScreen = gameMenu(playGame, () => {
     t("Connected to Asia Server!");
     bt("Join a Game", () => {
       joinGame();
     });
+  });
 
-    t("");
-    bt("Back", () => playGame());
-    redraw();
-  };
-
-  let joinGame = () => {
-    cls();
+  let joinGame = gameMenu(serverScreen, () => {
     t("Available Games")
     t("");
     ["1v1 noob only", "please be a noob", "1v1 python", "5v3 crazy computer", "BGHBGHBGH", "Sunken D - pro only"].forEach((name) => {
@@ -100,11 +94,7 @@ function cafe() {
         });
       });
     });
-
-    t("");
-    bt("Back", () => serverScreen());
-    redraw();
-  };
+  });;
 
   cafe();
 };

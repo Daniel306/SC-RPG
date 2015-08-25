@@ -71,11 +71,18 @@ let consumeItem = (itemData) => {
   return promise;
 };
 
+const EQUIP_TYPE_MAP = {
+  "ek": "left",
+  "em": "right",
+  "ed": "desk",
+};
+
 let equipItem = (itemData) => {
   let resolve = null;
   let promise = new Promise((resolve) => resolve = resolve);
 
-  
+
+  return promise;  
 };
 
 let unequipItem = (itemData) => {

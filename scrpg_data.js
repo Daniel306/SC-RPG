@@ -74,6 +74,11 @@ let newPlayer = function() {
     statPoints: 0,
     racePoints: 0,
     inventory: ["coffee", "tea", "coffee"],
+    equip: {
+      left: null,
+      right: null,
+      desk: null
+    }
   });
   return player;
 };

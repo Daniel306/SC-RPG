@@ -29,7 +29,6 @@ function name(){
 function story(){
   let race = ["Terran", "Protoss", "Zerg"];
 
-
   cls();
   vn(
     GS.player.name + " was an ordinatry kid",
@@ -51,7 +50,7 @@ function story(){
       "After selling everything, " + GS.player.name + " travels to Seoul",
       "The captital of Korea, and the home of the best Starcraft players"
     )
-  }).then(() => wasteTime(1000)).then(() =>{
+  }).then(() => wasteTime(1000)).then(() => {
     t("");
     t("And so the journey begins");
     anykey().then(menu);

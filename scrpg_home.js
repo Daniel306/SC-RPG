@@ -43,7 +43,7 @@ function home() {
     let sleepFlavourText = [
       "zzzzz",
       "zZZZZzzzz",
-      "\"not enough mineral\"",
+      "\"not enough minerals\"",
       "omg zerg rush!",
       "you must construct additional pylons",
       "* nuclear launch detected *",

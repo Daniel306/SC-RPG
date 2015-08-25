@@ -1,59 +1,80 @@
+function gameMenu(backTo, fcn) {
+  return () => {
+    cls();
 
-function mall() {
-  cls();
+    let returnVal = fcn();
+
+    t("");
+    bt("Back", backTo);
+    redraw();
+    return returnVal;    
+  }
+};
+
+let mall = gameMenu(menu, () => {
   t("You have $", GS.player.cash)
   t("");
-  bt("Browse for Hardware");
+  bt("Browse for Hardware", hardware);
   bt("Visit a Food Shop", foodShop);
   bt("Beg for Money", beg);
   bt("Go to the Bank", bank);
-  
-  t("")
-  bt("Back", menu);
+});
 
-  redraw();
-}
-
-function foodShop() {
-  cls();
-  t("Please come in! What would you like to buy?");
-  t("");
-
-  ["tea", "coffee", "red bull"].forEach((name)=> {
-    let itemData = getItemByName(name);
-    let itemBt = bt(name, () => {
+function makeSellItemScreen (backTo, itemData) {
+  return gameMenu(backTo, () => {
+    displayItemData(itemData);
+    bt("Buy for $" + itemData.price, () => takeMoney(itemData.price, () => {
       cls();
-      displayItemData(itemData);
-      bt("Buy for $" + itemData.price, () => takeMoney(itemData.price, () => {
-        cls();
-        t("You purchased " + name);
-        anykey().then(foodShop);
-        GS.player.inventory.push(name);
-      }));
+      t("You purchased " + name);
+      anykey().then(backTo);
+      GS.player.inventory.push(name);
+    }));
 
+    if (itemData.type == "c") {
       bt("Buy for $" + itemData.price + " and Consume Immediately", () => takeMoney(itemData.price, () => {
         cls();
         t("You purchased " + itemData.name + ".");
         consumeItem(itemData)
           .then(anykey)
-          .then(foodShop);
+          .then(backTo);
       }));
+    } else if (itemData.type.substr(0, 1) == "e") {
+      bt("Buy for $" + itemData.price + " and Equip Immediately", () => takeMoney(itemData.price, () => {
+        cls();
+        t("You purchased " + itemData.name + " equipped it.");
+        consumeItem(itemData)
+          .then(anykey)
+          .then(backTo);
+      }));      
 
-      t("");
-      bt("Back", foodShop);
-      redraw();
-    });
+    }
 
+  });
+};
+
+let hardware = gameMenu(mall, () => {
+  t("Welcome our shop! Can in interest you in some hardware?");
+  t("");
+
+  ["budget mouse", "high quality mouse", "budget keyboard", "high quality keyboard", "cute zergling figurine"].forEach((name)=> {
+    let itemData = getItemByName(name);
+    let itemBt = bt(name, makeSellItemScreen(hardware, itemData));
     itemBt.inline = true;
   });
+});
 
+let foodShop = gameMenu(mall, () => {
+  t("Please come in! What would you like to buy?");
   t("");
-  bt("Back", mall);
-  redraw();
-}
 
-function bank(){
-  cls();
+  ["tea", "coffee", "red bull"].forEach((name)=> {
+    let itemData = getItemByName(name);
+    let itemBt = bt(name, makeSellItemScreen(foodShop, itemData));
+    itemBt.inline = true;
+  });
+});
+
+let bank = gameMenu(mall, () => {
   t("You have $", GS.player.cash, " on hand");
   t("You have $", GS.player.saving, " in your account")
   let moneyBox = textBox().value;
@@ -81,16 +102,9 @@ function bank(){
     return (validMoney() && moneyBox() <= GS.player.saving)
   })
   withdraw.inline = true;
+});
 
-  t("");
-  bt("Back", mall);
-
-  redraw();
-}
-
-function beg(){
-  cls();
-  
+let beg = gameMenu(mall, () => {
   let bitOfMoney = function(){
     let amount = Util.randint(5, 10);
     GS.player.cash += amount;
@@ -132,11 +146,12 @@ function beg(){
 
   let useSign = function(List){
     takeEnergy(10, () => {
+      cls();
+      t("Begging for money");
+      return wasteTime(1000).then(Util.randomPickProbList(List)).then(beg);
+    }, () => {
       t("You are too tired to beg")
       return anykey().then(beg);
-    }, () => {
-      cls();
-      return wasteTime(500).then(Util.randomPickProbList(List)).then(beg);
     });
   }
 
@@ -145,11 +160,5 @@ function beg(){
       () => useSign([bitOfMoney, 2, bitOfFood, 3, lotsOfMoney, 1]));
 
   bt("\"Will play SC for food\"", 
-      () => useSign([bitOfMoney, 2, bitOfFood, 2,  
-                      SCFan, 3, SCHater, 3]));
-
-  t("");
-  bt("Back", mall);
-  
-  redraw();
-}
+    () => useSign([bitOfMoney, 2, bitOfFood, 2, SCFan, 3, SCHater, 3]));
+});

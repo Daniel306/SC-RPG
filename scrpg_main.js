@@ -27,6 +27,9 @@ function name(){
 }
 
 function story(){
+  let race = ["Terran", "Protoss", "Zerg"];
+
+
   cls();
   vn(
     GS.player.name + " was an ordinatry kid",
@@ -36,12 +39,33 @@ function story(){
     "At that moment " + GS.player.name + " discovered his true destiny",
     GS.player.name + " swore to become the best Starcraft player in history"
   ).then(() => {
-    menu();
+    cls();
+    t("Choose your race! You cannot change this later.");
+    t("");
+    return getChoice(...race);
+  }).then((c) => {
+    cls();
+    GS.player.race = ["t", "p", "z"][c];
+    return vn(
+      GS.player.name + " have chosen to be a " + race[c] + " player!",
+      "After selling everything, " + GS.player.name + " travels to Seoul",
+      "The captital of Korea, and the home of best Starcraft players"
+    )
+  }).then(() => {
+    t("");
+    t("");
+    t("And so it begins");
+    anykey().then(menu);
   });
 }
 
 function menu() {
   cls();
+  t("Welcome to Seoul");
+  t("It is " + getTime().toLocaleString());
+  t("");
+  t("Where would you like to go?");
+  t("");
 
   bt("Home", () => home());
   bt("Internet Cafe", () => cafe());
@@ -49,6 +73,18 @@ function menu() {
   bt("University", () => uni());
   bt("Mall", () => mall());
   bt("Fate Zero Prologue", () => fate());
+
+  t("");
+
+  bt("Return to Main Menu", () => {
+    cls();
+    t("Are you sure?")
+    t("Any unsaved progress will be lost");
+    getChoice("Yes, Quit", "Go Back").then((c) => [
+      start,
+      menu
+    ][c]());
+  });
 
   redraw();
 }

@@ -3,10 +3,14 @@ function cafe() {
     cls();
     t("Welcome to Internet Cafe!");
     t("Would you like to get a PC for $10?");
+    t("")
     
     getChoice("Yes - pay $10", "Leave").then((c) => {
       [
-        () => payFor(10, playGame, menu),
+        () => payFor(10, 
+          () => {t("You paid $10"); anykey().then(playGame)},
+          () => anykey().then(menu)
+        ),
         () => menu()
       ][c]();
     });
@@ -14,22 +18,26 @@ function cafe() {
 
   let playGame = () => {
     cls();
-    t("Which game would you like to play?")
-    bt("Starcraft", () => bNet());
+    t("You have a PC in front of you!")
+    t("");
 
-    ["Maple Story", "Counter-Strike"].forEach((game) => {
-      bt(game, () => {
+    ["Play Maple Story", "Play Counter-Strike", "Browse Internet", "Play a Random Game"].forEach((action) => {
+      bt(action, () => {
         cls();
         return vn(
-          "What's wrong with you?",
-          "Why would you want to play " + game + "?",
-          "You've been kicked out of the Internet Cafe"
+          "You decided to " + action,
+          "It was interesting",
+          "And you even enjoyed it a little",
+          "Unfortunately, it did not improve any skills that mattered",
+          "Eventually, you left the Internet Cafe without gaining anything"
         ).then(() => menu());
       });
     });
 
+    bt("Play Starcraft", () => bNet());
+
     t("");
-    bt("Leave", () => menu());
+    bt("Leave Internet Cafe", () => menu());
     redraw();
   };
 
@@ -78,6 +86,7 @@ function cafe() {
             if (teamThatWon == 0) {
               cls();
               t("You won!");
+              t("");
               let expGain = opponentToExp(generatePlayer(1));
               t("You gained " + expGain + " experience");
               let p = GS.player;

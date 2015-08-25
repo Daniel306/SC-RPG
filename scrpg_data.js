@@ -73,21 +73,32 @@ let newPlayer = function() {
     saving: 0,
     statPoints: 0,
     racePoints: 0,
-    inventory: ["cofee", "tea", "coffee"],
+    inventory: ["coffee", "tea", "coffee"],
   });
   return player;
 };
 
 let GS = {
   player: newPlayer(),
+  time: 0,
+};
+
+let getTime = () => {
+  let startTime = (new Date(2010, 6, 27)).getTime();
+  return new Date(startTime + GS.time * 1000);
 };
 
 // try to pay for a task  (could be learning something, or even putting money in bank)
-let payFor = function(price, task){
+let payFor = function(price, task, cantPay){
   if (GS.player.cash >= price){
     GS.player.cash -= price;
     task();
-  } else t("not enough cash");
+  } else {
+    t("Not enough cash")
+    if (cantPay) {
+      cantPay();
+    }
+  };
 }
 
 exports.payFor = payFor;
@@ -95,6 +106,7 @@ exports.GS = GS;
 exports.generatePlayer = generatePlayer;
 exports.levelToExpFormula = levelToExpFormula;
 exports.opponentToExp = opponentToExp;
+exports.getTime = getTime;
 
 })(window);
 

@@ -74,8 +74,21 @@ function cafe() {
         ]).then((teamThatWon) => {
           t("");
           t("Game has ended");
-          return anykey();
-        }).then(() => joinGame());
+          anykey().then(() => {
+            if (teamThatWon == 0) {
+              cls();
+              t("You won!");
+              let expGain = opponentToExp(generatePlayer(1));
+              t("You gained " + expGain + " experience");
+              let p = GS.player;
+              p.exp += expGain;
+              t("Total experience: " + (p.exp - expGain) + "/" + p.goalExp + " -> " + p.exp + "/" + p.goalExp);
+              anykey().then(checkLevelUp).then(joinGame);
+            } else {
+              joinGame();  
+            }            
+          });
+        });
       });
     });
 

@@ -1,5 +1,26 @@
 (function(exports) {
 
+let expNeededPerStatPoint = (x) => {
+  var exp = 50 + 10 * x + Math.pow(1.17, x);
+  return Math.round(exp/2);
+};
+
+let levelToExpFormula = (x) => {
+  var total = 0;
+  var s = 1;
+  for (var i=x*s; i<(x+1)*s; i++) {
+    total += expNeededPerStatPoint(i);
+  }
+  return total;
+};
+
+let opponentToExp = (e) => {
+  let x = e.micro + e.macro + e.strat;
+  var top = expNeededPerStatPoint(x) * 2;
+  var bot = 5+ 0.5*x / Math.log(x+5);
+  return Math.round(top/bot);
+};
+
 let newCharacter = function(name, race, energy, skills, micro, macro, strat) { 
   return {
     name,
@@ -30,22 +51,29 @@ let generatePlayer = function(skill) {
     name,
     Util.randomPickFromArray(["t", "p", "z"]), 
     100, 
-    [Util.randint(skill * 7, skill * 14), Util.randint(skill * 7, skill * 14), Util.randint(skill * 7, skill * 14)],
-    Util.randint(skill * 7, skill * 14),
-    Util.randint(skill * 7, skill * 14),
-    Util.randint(skill * 7, skill * 14)
+    [
+      Util.randint(skill, skill * 1.5),
+      Util.randint(skill, skill * 1.5),
+      Util.randint(skill, skill * 1.5)
+    ],
+    Util.randint(skill, skill * 1.5),
+    Util.randint(skill, skill * 1.5),
+    Util.randint(skill, skill * 1.5)
   );
 };
 
 let newPlayer = function() {
-  let player = newCharacter("nameless", "t", 20, [0,0,0], 5, 5, 5);
+  let player = newCharacter("nameless", "t", 100, [0,0,0], 5, 5, 5);
   _.extend(player, {
     level: 1,
     exp: 0,
-    goalExp: 10,
+    goalExp: levelToExpFormula(1),
     race: "t",
     cash: 20,
     saving: 0,
+    statPoints: 0,
+    racePoints: 0,
+    inventory: ["cofee", "tea", "coffee"],
   });
   return player;
 };
@@ -62,10 +90,11 @@ let payFor = function(price, task){
   } else t("not enough cash");
 }
 
-
 exports.payFor = payFor;
 exports.GS = GS;
 exports.generatePlayer = generatePlayer;
+exports.levelToExpFormula = levelToExpFormula;
+exports.opponentToExp = opponentToExp;
 
 })(window);
 

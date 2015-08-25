@@ -2,7 +2,7 @@ function start (){
   cls()
   t("SC RPG")
   bt("New Game", () => name());
-  bt("Load Game");
+  bt("Load Game", loadScreen);
   t("");
   bt("Credits");
 
@@ -85,6 +85,32 @@ function menu() {
     ][c]());
   });
 
+  redraw();
+}
+
+function loadScreen(){
+  cls();
+
+  function loadSlot(i){
+    if (localStorage["GS" + i] == undefined){
+      t("empty slot, nothing to load");
+      anykey().then(loadScreen);
+    }else{
+      GS = JSON.parse(localStorage["GS" + i]);
+      t("loaded succesfully")
+      anykey().then(menu);
+    }
+    
+  }
+  for (let i = 1; i < 4; i++){
+    let name = "empty slot"
+    if (localStorage["GS" + i] != undefined){
+      let S = JSON.parse(localStorage["GS" + i]);
+      name = S.player.name + " - level " + S.player.level; 
+    }
+    bt(name, ()=>loadSlot(i));
+  }
+  bt("Back", start);
   redraw();
 }
 

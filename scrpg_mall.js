@@ -1,14 +1,54 @@
 
 function mall() {
   cls();
-  t("you have $", GS.player.cash)
-  bt("Hardware");
-  bt("Beg for money", () => beg());
-  bt("Go to the bank", () => bank());
+  t("You have $", GS.player.cash)
+  t("");
+  bt("Browse for Hardware");
+  bt("Visit a Food Shop", foodShop);
+  bt("Beg for Money", beg);
+  bt("Go to the Bank", bank);
   
   t("")
-  bt("Back", () => menu());
+  bt("Back", menu);
 
+  redraw();
+}
+
+function foodShop() {
+  cls();
+  t("Please come in! What would you like to buy?");
+  t("");
+
+  ["tea", "coffee", "red bull"].forEach((name)=> {
+    let itemData = getItemByName(name);
+    let itemBt = bt(name, () => {
+      cls();
+      displayItemData(itemData);
+      bt("Buy for $" + itemData.price, () => takeMoney(itemData.price, () => {
+        cls();
+        t("You purchased " + name);
+        anykey().then(foodShop);
+        GS.player.inventory.push(name);
+      }));
+
+      bt("Buy for $" + itemData.price + " and Consume Immediately", () => takeMoney(itemData.price, () => {
+        cls();
+        t("You purchased " + itemData.name + ".");
+        consumeItem(itemData)
+          .then(anykey)
+          .then(foodShop);
+      }));
+
+      t("");
+      bt("Back", foodShop);
+      redraw();
+    });
+
+    itemBt.inline = true;
+  });
+
+  t("");
+  bt("Back", mall);
   redraw();
 }
 
@@ -43,7 +83,7 @@ function bank(){
   withdraw.inline = true;
 
   t("");
-  bt("Back", () => mall());
+  bt("Back", mall);
 
   redraw();
 }
@@ -54,63 +94,62 @@ function beg(){
   let bitOfMoney = function(){
     let amount = Util.randint(5, 10);
     GS.player.cash += amount;
-    vn("A kind person gives you $" + amount + " for food",
-      "but it's obviously going to be spent on starcraft").then(beg);
+    return vn("A kind person gives you $" + amount + " for food",
+      "but it's obviously going to be spent on starcraft");
   }
 
   let lotsOfMoney = function(){
     let amount = Util.randint(30, 50);
     GS.player.cash += amount;
-    vn("A rich person gives you $" + amount + " for groceries",
-      "but it's obviously going to be spent on starcraft").then(beg);
+    return vn("A rich person gives you $" + amount + " for groceries",
+      "but it's obviously going to be spent on starcraft");
   }
 
   let bitOfFood = function(){
-    let gain = Math.min(GS.player.maxEnergy - GS.player.energy, 20);
-    GS.player.energy += gain;
-    vn("A kind person gives you a sandwich",
+    let gain = giveEnergy(20);
+    return vn("A kind person gives you a sandwich",
         "It is delicious",
-        "You recover " + gain + " energy").then(beg);
+        "You recover " + gain + " energy");
   }
 
-  let SCFan = function(){
+  let SCFan = function() {
     let amount =  Util.randint(5, 10);
     GS.player.cash += amount;
-    vn("A kind starcraft fan takes you up on the offer",
+    return vn("A kind starcraft fan takes you up on the offer",
        "after playing starcraft for him, he gives you a red bull and $" 
-        + amount).then(beg);
+        + amount);
   }
 
   let SCHater = function(){
-     let loss = Math.min(GS.player.energy, 20);
-     GS.player.energy = GS.player.energy - loss;
-     vn("An evil starcraft hater calls you a noob",
-       "tells you to play Call of Duty instead",
-       "Then kicks you",
-       "It hurts",
-       "You lose " + loss + " energy").then(beg);
+    takeEnergy(Math.min(GS.player.energy, 20), (loss) => {
+      return vn("An evil starcraft hater calls you a noob",
+        "tells you to play Call of Duty instead",
+        "Then kicks you",
+        "It hurts",
+        "You lose " + loss + " energy");      
+    })
   }
 
   let useSign = function(List){
-    console.log(GS.player.energy);
-    if (GS.player.energy < 10){
+    takeEnergy(10, () => {
       t("You are too tired to beg")
-      anykey().then(beg);
-    }else{
-      GS.player.energy -= 10;
-      wasteTime(500).then(Util.randomPickProbList(List))
-    }
+      return anykey().then(beg);
+    }, () => {
+      cls();
+      return wasteTime(500).then(Util.randomPickProbList(List)).then(beg);
+    });
   }
 
-  t("Choose your sign");
-  bt("I hunger, Please food",  
+  t("Choose your begging sign");
+  bt("\"I hunger, Please food\"",  
       () => useSign([bitOfMoney, 2, bitOfFood, 3, lotsOfMoney, 1]));
 
-  bt("Will play SC for food", 
+  bt("\"Will play SC for food\"", 
       () => useSign([bitOfMoney, 2, bitOfFood, 2,  
                       SCFan, 3, SCHater, 3]));
 
-  bt("Back", () => mall());
+  t("");
+  bt("Back", mall);
   
   redraw();
 }

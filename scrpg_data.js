@@ -73,28 +73,63 @@ let newPlayer = function() {
     saving: 0,
     statPoints: 0,
     racePoints: 0,
-    inventory: ["cofee", "tea", "coffee"],
+    inventory: ["coffee", "tea", "coffee"],
   });
   return player;
 };
 
 let GS = {
   player: newPlayer(),
+  time: 0,
 };
 
-// try to pay for a task  (could be learning something, or even putting money in bank)
-let payFor = function(price, task){
+let getTime = () => {
+  let startTime = (new Date(2010, 6, 27)).getTime();
+  return new Date(startTime + GS.time * 1000);
+};
+
+// try to pay for a task
+let takeMoney = function(price, onEnough, onNotEnough){
   if (GS.player.cash >= price){
     GS.player.cash -= price;
-    task();
-  } else t("not enough cash");
+    onEnough();
+  } else {
+    t("Not enough cash")
+    if (onNotEnough) {
+      onNotEnough();
+    }
+  };
+}
+let takeEnergy = function(energy, onEnough, noNotEnough) {
+  if (GS.player.energy >= energy) {
+    GS.player.energy -= energy;
+    if (onEnough)
+      return onEnough(energy);
+  } else {
+    if (onNotEnough)
+      return noNotEnough(energy);
+  }
+}
+// returns amount given
+let giveEnergy = (toGive) => {
+  let gain = Math.min(GS.player.maxEnergy - GS.player.energy, toGive);
+  GS.player.energy += gain;
+  return gain;
 }
 
-exports.payFor = payFor;
 exports.GS = GS;
-exports.generatePlayer = generatePlayer;
+
+exports.takeMoney = takeMoney;
+
+exports.takeEnergy = takeEnergy;
+exports.giveEnergy = giveEnergy;
+
 exports.levelToExpFormula = levelToExpFormula;
 exports.opponentToExp = opponentToExp;
+
+exports.generatePlayer = generatePlayer;
+
+exports.getTime = getTime;
 
 })(window);
 

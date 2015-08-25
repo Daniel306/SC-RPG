@@ -76,7 +76,7 @@ function spentRacePoint() {
     cls();
     t(`You have ${p.racePoints} race points`);
 
-    [["t", "Terran"], ["p", "Protoss", "z", "Zerg"]].forEach((obj) => {
+    [["t", "Terran"], ["p", "Protoss"], ["z", "Zerg"]].forEach((obj) => {
       let stat = obj[0];
       let statName = obj[1];
 

@@ -1,5 +1,5 @@
  babel \
-        scrpg_render.js \
+        render.js \
         scrpg_api.js \
         scrpg_data_item.js \
         scrpg_data.js \

@@ -102,6 +102,7 @@ function loadScreen(){
     }
     
   }
+  t("Choose save slot to load:")
   for (let i = 1; i < 4; i++){
     let name = "empty slot"
     if (localStorage["GS" + i] != undefined){

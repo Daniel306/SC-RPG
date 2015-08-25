@@ -84,25 +84,35 @@ function home() {
 function saveScreen(){
   cls();
 
-  // First, read the saves to see if they are empty
   function saveSlot(i){
-    // Can add "are you sure" later
-    localStorage["GS" + i] = JSON.stringify(GS);
-    t("saved in slot " + i);
-    anykey().then(saveScreen);
+    if (localStorage["GS" + i] != undefined){
+      t("are you sure? this save slot has a save already")
+      yesOrNo().then((no) => {
+        if (no) {
+          anykey().then(saveScreen);
+        }else{
+          localStorage["GS" + i] = JSON.stringify(GS);
+          t("saved in slot " + i);
+          anykey().then(saveScreen);
+        }
+      })
+    }else{
+      localStorage["GS" + i] = JSON.stringify(GS);
+      t("saved in slot " + i);
+      anykey().then(saveScreen);
+    }
   }
-  //Choose save slot:
+
+  t("Choose save slot to save:")
   for (let i = 1; i <  4; i++){
     let name = "empty slot"
-    if (localStorage["GS" + i] == undefined){
-      //noop
-    }else{
+    if (localStorage["GS" + i] != undefined){
       let S = JSON.parse(localStorage["GS" + i]);
       name = S.player.name + " - level " + S.player.level; 
     }
     bt(name, () => saveSlot(i));
   }
-  bt("back home", home);
+  bt("Back", home);
 
   redraw();
 }

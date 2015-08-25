@@ -103,7 +103,7 @@ function saveScreen(){
     }
   }
 
-  t("Choose save slot to save:")
+  t("Choose a save slot:")
   for (let i = 1; i <  4; i++){
     let name = "empty slot"
     if (localStorage["GS" + i] != undefined){

@@ -54,51 +54,51 @@ function beg(){
   let bitOfMoney = function(){
     let amount = Util.randint(5, 10);
     GS.player.cash += amount;
-    vn("A kind person gives you $" + amount + " for food",
-      "but it's obviously going to be spent on starcraft").then(beg);
+    return vn("A kind person gives you $" + amount + " for food",
+      "but it's obviously going to be spent on starcraft");
   }
 
   let lotsOfMoney = function(){
     let amount = Util.randint(30, 50);
     GS.player.cash += amount;
     vn("A rich person gives you $" + amount + " for groceries",
-      "but it's obviously going to be spent on starcraft").then(beg);
+      "but it's obviously going to be spent on starcraft");
   }
 
   let bitOfFood = function(){
     let gain = Math.min(GS.player.maxEnergy - GS.player.energy, 20);
     GS.player.energy += gain;
-    vn("A kind person gives you a sandwich",
+    return vn("A kind person gives you a sandwich",
         "It is delicious",
-        "You recover " + gain + " energy").then(beg);
+        "You recover " + gain + " energy");
   }
 
   let SCFan = function(){
     let amount =  Util.randint(5, 10);
     GS.player.cash += amount;
-    vn("A kind starcraft fan takes you up on the offer",
+    return vn("A kind starcraft fan takes you up on the offer",
        "after playing starcraft for him, he gives you a red bull and $" 
-        + amount).then(beg);
+        + amount);
   }
 
   let SCHater = function(){
      let loss = Math.min(GS.player.energy, 20);
      GS.player.energy = GS.player.energy - loss;
-     vn("An evil starcraft hater calls you a noob",
+     return vn("An evil starcraft hater calls you a noob",
        "tells you to play Call of Duty instead",
        "Then kicks you",
        "It hurts",
-       "You lose " + loss + " energy").then(beg);
+       "You lose " + loss + " energy");
   }
 
   let useSign = function(List){
-    console.log(GS.player.energy);
     if (GS.player.energy < 10){
       t("You are too tired to beg")
       anykey().then(beg);
     }else{
       GS.player.energy -= 10;
-      wasteTime(500).then(Util.randomPickProbList(List))
+      cls();
+      wasteTime(500).then(Util.randomPickProbList(List)).then(beg);
     }
   }
 
@@ -110,6 +110,7 @@ function beg(){
       () => useSign([bitOfMoney, 2, bitOfFood, 2,  
                       SCFan, 3, SCHater, 3]));
 
+  t("");
   bt("Back", () => mall());
   
   redraw();

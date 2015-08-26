@@ -102,7 +102,7 @@ let loadScreen = gameMenu(start, () => {
     let name = "Slot " + i + ": empty slot"
     if (localStorage["GS" + i] != undefined){
       let S = JSON.parse(localStorage["GS" + i]);
-      name = "Slot" + i + ": " + S.player.name 
+      name = "Slot " + i + ": " + S.player.name 
               + " - level " + S.player.level; 
     }
     bt(name, ()=>loadSlot(i));

@@ -83,10 +83,6 @@ let newPlayer = function() {
   return player;
 };
 
-let GS = {
-  player: newPlayer(),
-  time: 0,
-};
 
 let getTime = () => {
   let startTime = (new Date(2010, 6, 27)).getTime();
@@ -122,7 +118,10 @@ let giveEnergy = (toGive) => {
   return gain;
 }
 
-exports.GS = GS;
+exports.GS = {
+  player: newPlayer(),
+  time: 0,
+};;
 
 exports.takeMoney = takeMoney;
 

@@ -35,13 +35,13 @@ let ITEM_DATA = [
   {name: "coffee",                 type:"c",   price: 20, desc: "Perfectly roasted, gives 40 energy"         , effect: ()=>giveEnergy(40)},
   {name: "red bull",               type:"c",   price: 50, desc: "Red bull gives you wins, provides 60 energy", effect: ()=>giveEnergy(60)},
   // mouse
-  {name: "budget mouse",           type:"em",  price: 50, desc: "+1 Micro and +1 Macro",                       effect: makeEquip({micro:1, macro: 1})},
-  {name: "high quality mouse",     type:"em",  price: 50, desc: "+2 Micro and +2 Macro",                       effect: makeEquip({micro:2, macro: 2})},
+  {name: "budget mouse",           type:"em",  price: 10, desc: "+1 Micro and +1 Macro",                       effect: makeEquip({micro:1, macro: 1})},
+  {name: "high quality mouse",     type:"em",  price: 15, desc: "+2 Micro and +2 Macro",                       effect: makeEquip({micro:2, macro: 2})},
   // keyboard
-  {name: "budget keyboard",        type:"ek",  price: 50, desc: "+1 Micro and +2 Macro",                       effect: makeEquip({micro:1, macro: 2})},
+  {name: "budget keyboard",        type:"ek",  price: 10, desc: "+1 Micro and +2 Macro",                       effect: makeEquip({micro:1, macro: 2})},
   {name: "high quality keyboard",  type:"ek",  price: 50, desc: "+2 Micro and +3 Macro",                       effect: makeEquip({micro:2, macro: 3})},
   // charm
-  {name: "cute zergling figurine", type:"ec",  price: 50, desc: "+3 vs Zerg. \"notice me\".",                  effect: makeEquip({skills:[0,0,3]})},
+  {name: "cute zergling figurine", type:"ec",  price: 10, desc: "+3 vs Zerg. \"notice me\".",                  effect: makeEquip({skills:[0,0,3]})},
   {name: "four-leaf clover",       type:"ec",  price: 50, desc: "+1 Strategy",                                 effect: makeEquip({strat: 1})},
 ];
 
@@ -57,42 +57,67 @@ let displayItemData = (itemData) => {
   t("")
 }
 
-let consumeItem = (itemData) => {
-  let promiseResolve = null;
-  let promise = new Promise((resolve) => promiseResolve = resolve);
-
+let consumeItem = (itemData) => new Promise((resolve) => {
   t("Comsuming " + itemData.name);
   return wasteTime(1000).then(() => {
     t("You consumed " + itemData.name + ".");
     itemData.effect();
-    promiseResolve();
+    resolve();
   });
-  
-  return promise;
-};
+});
 
-const EQUIP_TYPE_MAP = {
+const EQUIP_TYPE_TO_SLOT = {
   "ek": "left",
   "em": "right",
-  "ed": "desk",
+  "ec": "desk",
 };
 
-let equipItem = (itemData) => {
-  let resolve = null;
-  let promise = new Promise((resolve) => resolve = resolve);
+let equipItem = (itemName) => {
+  let itemData = getItemByName(itemName);
+  let slot = EQUIP_TYPE_TO_SLOT[itemData.type];
+  let p = GS.player;
 
-
-  return promise;  
+  if (p.equip[slot] != null) {
+    unequipItem(slot);
+  }
+  p.equip[slot] = itemName;
 };
 
-let unequipItem = (itemData) => {
+let unequipItem = (slot) => {
+  let p = GS.player;
+  if (p.equip[slot]) {
+    GS.player.inventory.push(p.equip[slot])
+  }
 
-}
+  p.equip[slot] = null;
+};
 
-exports.getItemByName = getItemByName;
-exports.ITEM_DATA = ITEM_DATA;
-exports.displayItemData = displayItemData;
-exports.consumeItem = consumeItem;
+// returns a TEMP player obj.
+let getEquipedPlayerStat = () => {
+  let p = _.clone(GS.player, true);
+
+  for (let slot in EQUIP_TYPE_TO_SLOT) {
+    let itemName = p.equip[EQUIP_TYPE_TO_SLOT[slot]];
+    if (itemName) {
+      let itemData = getItemByName(itemName);
+      itemName.apply(p);
+    }
+  }
+  return p;
+};
+
+_.extend(exports, {
+  ITEM_DATA,
+  getItemByName,
+
+  equipItem,
+  unequipItem,
+  getEquipedPlayerStat,
+
+  consumeItem,
+
+  displayItemData
+});
 
 })(window);
 

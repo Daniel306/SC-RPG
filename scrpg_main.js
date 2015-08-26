@@ -83,7 +83,6 @@ function menu() {
 }
 
 let loadScreen = gameMenu(start, () => {
-  
   function loadSlot(i){
     if (localStorage["GS" + i] == undefined) {
       cls();

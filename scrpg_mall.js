@@ -25,15 +25,6 @@ function makeSellItemScreen (backTo, itemData) {
           .then(anykey)
           .then(backTo);
       }));
-    } else if (itemData.type.substr(0, 1) == "e") {
-      bt("Buy for $" + itemData.price + " and Equip Immediately", () => takeMoney(itemData.price, () => {
-        cls();
-        t("You purchased " + itemData.name + " equipped it.");
-        equipItem(itemData)
-          .then(anykey)
-          .then(backTo);
-      }));      
-
     }
   });
 };

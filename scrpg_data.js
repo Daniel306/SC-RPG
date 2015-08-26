@@ -69,7 +69,7 @@ let newPlayer = function() {
     exp: 0,
     goalExp: levelToExpFormula(1),
     race: "t",
-    cash: 20,
+    cash: 100,
     saving: 0,
     statPoints: 0,
     racePoints: 0,

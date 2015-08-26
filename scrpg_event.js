@@ -16,12 +16,11 @@ const MINUTE = 60;
 const HOUR = 60*MINUTE;
 const DAY = 24*HOUR;
 
-
 // Below are a bunch of events
 //let crazy_guy = 
 
 
-let createEvents = function(seed){
+let createEvents = function(seed) {
 
   createEvent(START_TIME, DAY, ()=>{
     let loss = Math.min(30, GS.player.energy);
@@ -37,30 +36,30 @@ let createEvents = function(seed){
 
   createEvent(START_TIME+7*DAY, DAY, ()=> {
     return vn("a random passerby shouts at you:",
-              "NOOB!",
-              "then walks away")
+      "NOOB!",
+      "then walks away")
   })
 
   eventList.sort((a,b) => {
-   return (a.startTime > b.startTime);
+    return b.startTime - a.startTime;
   })
-
 }
 
 // Checks if event should trigger based on current time
 // Also eliminates events whose deadline passed from list.
-let triggerEvent = function(){
-  console.log("test")
-  console.log(eventList)
-  while(eventList[0].startTime + eventList[0].dur < getTime() ){
+let triggerEvent = () => new Promise((resolve) => {
+  while(eventList.length && eventList[0].startTime + eventList[0].dur < getTime() ){
     eventList.shift(); // passed deadline
   }
-  console.log(eventList[0].startTime.getTime())
-  if (eventList[0].startTime <= getTime()){ // meaning it started
-    return eventList[0].fcn();
+
+  if (eventList.length && eventList[0].startTime <= getTime()) {
+    cls();
+    eventList[0].fcn().then(resolve);
+  } else {
+    resolve();
   }
-  return null; // no function trigger
-}
+});
+
 exports.createEvents = createEvents;
 exports.triggerEvent = triggerEvent;
 

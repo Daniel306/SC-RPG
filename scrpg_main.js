@@ -53,33 +53,35 @@ function story(){
 }
 
 function menu() {
-  cls();
-  createEvents(5);
-  t("Welcome to Seoul");
-  t("It is " + getTime().toLocaleString());
-  t("");
-  t("Where would you like to go?");
-  t("");
-
-  bt("Home", home);
-  bt("Internet Cafe", cafe);
-  bt("Tournament", tournament);
-  bt("University", uni);
-  bt("Mall", mall);
-
-  t("");
-
-  bt("Return to Main Menu", () => {
+  triggerEvent().then(() => {
     cls();
-    t("Are you sure?")
-    t("Any unsaved progress will be lost");
-    getChoice("Yes, Quit", "Go Back").then((c) => [
-      start,
-      menu
-    ][c]());
-  });
+    createEvents(5);
+    t("Welcome to Seoul");
+    t("It is " + getTime().toLocaleString());
+    t("");
+    t("Where would you like to go?");
+    t("");
 
-  redraw();
+    bt("Home", home);
+    bt("Internet Cafe", cafe);
+    bt("Tournament", tournament);
+    bt("University", uni);
+    bt("Mall", mall);
+
+    t("");
+
+    bt("Return to Main Menu", () => {
+      cls();
+      t("Are you sure?")
+      t("Any unsaved progress will be lost");
+      getChoice("Yes, Quit", "Go Back").then((c) => [
+        start,
+        menu
+      ][c]());
+    });
+
+    redraw();    
+  });
 }
 
 let loadScreen = gameMenu(start, () => {

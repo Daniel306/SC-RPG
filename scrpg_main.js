@@ -54,6 +54,7 @@ function story(){
 
 function menu() {
   cls();
+  createEvents(5);
   t("Welcome to Seoul");
   t("It is " + getTime().toLocaleString());
   t("");
@@ -65,6 +66,7 @@ function menu() {
   bt("Pro Tour");
   bt("University", () => uni());
   bt("Mall", () => mall());
+  bt("EventArea", triggerEvent);
   bt("Fate Zero Prologue", () => fate());
 
   t("");
@@ -109,6 +111,7 @@ let loadScreen = gameMenu(start, () => {
   }
     
 });
+
 
 start();
 m.mount(document.body, Renderer);

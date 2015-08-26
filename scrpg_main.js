@@ -65,7 +65,6 @@ function menu() {
   bt("Tournament", tournament);
   bt("University", uni);
   bt("Mall", mall);
-  bt("Fate Zero Prologue", fate);
 
   t("");
 

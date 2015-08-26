@@ -37,7 +37,7 @@ let newCharacter = function(name, race, energy, skills, micro, macro, strat) {
 let newBoss = function(reward, ...otherParams) {
   var enemy = newCharacter(...otherParams);
   enemy.reward = reward;
-  return player;
+  return enemy;
 };
 
 let generatePlayer = function(skill) {
@@ -69,7 +69,7 @@ let newPlayer = function() {
     exp: 0,
     goalExp: levelToExpFormula(1),
     race: "t",
-    cash: 20,
+    cash: 100,
     saving: 0,
     statPoints: 0,
     racePoints: 0,
@@ -121,19 +121,22 @@ let giveEnergy = (toGive) => {
 exports.GS = {
   player: newPlayer(),
   time: 0,
-};;
+  curBossIdx: 0,
+};
 
-exports.takeMoney = takeMoney;
+_.extend(exports, {
+  takeMoney,
+  takeEnergy,
+  giveEnergy,
 
-exports.takeEnergy = takeEnergy;
-exports.giveEnergy = giveEnergy;
+  levelToExpFormula,
+  opponentToExp,
 
-exports.levelToExpFormula = levelToExpFormula;
-exports.opponentToExp = opponentToExp;
-
-exports.generatePlayer = generatePlayer;
-
-exports.getTime = getTime;
+  generatePlayer,
+  newBoss,
+  
+  getTime,
+});
 
 })(window);
 

@@ -61,13 +61,11 @@ function menu() {
   t("Where would you like to go?");
   t("");
 
-  bt("Home", () => home());
-  bt("Internet Cafe", () => cafe());
-  bt("Pro Tour");
-  bt("University", () => uni());
-  bt("Mall", () => mall());
-  bt("EventArea", triggerEvent);
-  bt("Fate Zero Prologue", () => fate());
+  bt("Home", home);
+  bt("Internet Cafe", cafe);
+  bt("Tournament", tournament);
+  bt("University", uni);
+  bt("Mall", mall);
 
   t("");
 
@@ -85,7 +83,6 @@ function menu() {
 }
 
 let loadScreen = gameMenu(start, () => {
-  
   function loadSlot(i){
     if (localStorage["GS" + i] == undefined) {
       cls();
@@ -111,7 +108,6 @@ let loadScreen = gameMenu(start, () => {
   }
     
 });
-
 
 start();
 m.mount(document.body, Renderer);

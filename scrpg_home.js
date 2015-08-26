@@ -1,16 +1,4 @@
 let home = gameMenu(menu, () => {
-  let itemScreen = gameMenu(inventory, (idx, itemData) => {
-    displayItemData(itemData);
-    
-    bt("Use", () => {
-      GS.player.inventory.splice(idx, 1);
-      cls();
-      consumeItem(itemData)
-        .then(anykey)
-        .then(inventory);
-    });
-  });
-
   let inventory = gameMenu(home, () => {
     t("Inventory");
 
@@ -21,9 +9,48 @@ let home = gameMenu(menu, () => {
       let itemBt = bt(itemName, () => itemScreen(idx, itemData));
       itemBt.inline = true;
     });
-    
+
     if (GS.player.inventory.length == 0) {
       t("You have nothing in your inventory");
+    };
+
+    t("");
+    [["left", "Left Hand"], ["right", "Right Hand"], ["desk", "On the Desk"]].forEach((slot) => {
+      let itemName = GS.player.equip[slot[0]];
+      let slotName = slot[1];
+
+      if (itemName) {
+        let itemData = getItemByName(itemName);
+        let text = t(slotName + ": " + itemData.name);
+        let unequipBt = bt("Unequip", () => {
+          unequipItem(slot[0]);
+          inventory();
+        });
+      }
+    });
+  });
+  
+  let itemScreen = gameMenu(inventory, (idx, itemData) => {
+    displayItemData(itemData);
+    
+    if (itemData.type == "c") {
+      bt("Consume", () => {
+        GS.player.inventory.splice(idx, 1);
+        cls();
+        consumeItem(itemData)
+          .then(anykey)
+          .then(inventory);
+      });
+    } else if (itemData.type.substr(0, 1) == "e") {
+      bt("Equip", () => {
+        GS.player.inventory.splice(idx, 1);
+        equipItem(itemData.name);
+        cls();
+        t("You have equipped " + itemData.name);
+        anykey().then(inventory);
+      });
+    } else {
+      console.log("fail");
     }
   });
 

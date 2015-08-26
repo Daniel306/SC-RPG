@@ -77,10 +77,10 @@ let vn = (...texts) => {
 /////////////////////////////////////////////////////////////
 
 function gameMenu(backTo, fcn) {
-  return () => {
+  return (...args) => {
     cls();
 
-    let returnVal = fcn();
+    let returnVal = fcn(...args);
 
     t("");
     bt("Back", backTo);

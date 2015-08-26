@@ -12,9 +12,9 @@ function makeSellItemScreen (backTo, itemData) {
     displayItemData(itemData);
     bt("Buy for $" + itemData.price, () => takeMoney(itemData.price, () => {
       cls();
-      t("You purchased " + name);
+      t("You purchased " + itemData.name);
       anykey().then(backTo);
-      GS.player.inventory.push(name);
+      GS.player.inventory.push(itemData.name);
     }));
 
     if (itemData.type == "c") {
@@ -25,15 +25,6 @@ function makeSellItemScreen (backTo, itemData) {
           .then(anykey)
           .then(backTo);
       }));
-    } else if (itemData.type.substr(0, 1) == "e") {
-      bt("Buy for $" + itemData.price + " and Equip Immediately", () => takeMoney(itemData.price, () => {
-        cls();
-        t("You purchased " + itemData.name + " equipped it.");
-        consumeItem(itemData)
-          .then(anykey)
-          .then(backTo);
-      }));      
-
     }
   });
 };

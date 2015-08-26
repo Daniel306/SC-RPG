@@ -1,9 +1,6 @@
 // call this to check level up
 // returns a promise and will the screen if leveled up
-function checkLevelUp() {
-  let promiseResolve = null;
-  let promise = new Promise((resolve) => promiseResolve = resolve);
-
+let checkLevelUp = () => new Promise((resolve) => {
   var p = GS.player;
   let levelBefore = p.level;
   while (p.exp >= p.goalExp) {
@@ -28,16 +25,11 @@ function checkLevelUp() {
       .then(spentRacePoint)
       .then(promiseResolve);
   } else {
-    promiseResolve();
+    resolve();
   }
+});
 
-  return promise;
-}
-
-function spentStatPoints() {
-  let promiseResolve = null;
-  let promise = new Promise((resolve) => promiseResolve = resolve);
-
+let spentStatPoints = () => new Promise((resolve) => {
   let p = GS.player;
   if (p.statPoints) {
     cls();
@@ -53,24 +45,19 @@ function spentStatPoints() {
 
         cls();
         t(statName + " incrased! (" + (p[stat] - 1) + " -> " + p[stat] + ")");
-        anykey().then(spentStatPoints).then(promiseResolve);
+        anykey().then(spentStatPoints).then(resolve);
       });
     });
 
     t("");
-    bt("Decide Later", promiseResolve);
+    bt("Decide Later", resolve);
     redraw();
   } else {
-    promiseResolve();
+    resolve();
   }
+});
 
-  return promise;
-}
-
-function spentRacePoint() {
-  let promiseResolve = null;
-  let promise = new Promise((resolve) => promiseResolve = resolve);
-
+let spentRacePoint = () => new Promise((resolve) => {
   let p = GS.player;
   if (p.racePoints) {
     cls();
@@ -86,16 +73,14 @@ function spentRacePoint() {
 
         cls();
         t("You skill against " + statName + " has incrased! (" + (p.skills[stat] - 1) + " -> " + p.skills[stat] + ")");
-        anykey().then(spentRacePoint).then(promiseResolve);
+        anykey().then(spentRacePoint).then(resolve);
       });
     });
 
     t("");
-    bt("Decide Later", promiseResolve);
+    bt("Decide Later", resolve);
     redraw();
   } else {
-    promiseResolve();
+    resolve();
   }
-
-  return promise;
-}
+});

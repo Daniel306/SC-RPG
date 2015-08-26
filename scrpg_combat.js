@@ -1,7 +1,4 @@
-function battle(map, teams) {
-  let promiseResolve = null;
-  let promise = new Promise((resolve,reject)=> promiseResolve = resolve);
-
+let battle = (map, teams) => new Promise((resolve) => {
   let rand = Util.rand;
   let randint = Util.randint;
 
@@ -108,7 +105,7 @@ function battle(map, teams) {
       if (team.enemies.filter((e) => !e.dead).length == 0) {
         // this team won
         renderBattle();
-        return promiseResolve(i);
+        return resolve(i);
       }
     }
 
@@ -159,7 +156,7 @@ function battle(map, teams) {
       }
       log(GS.player.name + " has left the game", "#88f");
       renderBattle();
-      promiseResolve(-1);
+      resolve(-1);
     });
 
     pauseBt.inline = quitBt.inline = true;
@@ -191,5 +188,4 @@ function battle(map, teams) {
   };
 
   battleStep();
-  return promise;
-};
+});

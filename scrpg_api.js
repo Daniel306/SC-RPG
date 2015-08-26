@@ -41,10 +41,7 @@ let anykey = UI.anykey;
 
 // visual novel style display of text
 // vn("text 1", "text2", "text3").then(_your_function_)
-let vn = (...texts) => {
-  let promiseResolve = null;
-  let promise = new Promise((resolve) => promiseResolve = resolve);
-
+let vn = (...texts) => new Promise((resolve) => {
   let printSingleText = (line) => {
     let words = line.split(" ").reverse();
 
@@ -59,7 +56,7 @@ let vn = (...texts) => {
             if (texts.length)
               printSingleText(texts.shift());
             else
-              promiseResolve();
+              resolve();
           })
         }
       });
@@ -68,9 +65,7 @@ let vn = (...texts) => {
   };
 
   printSingleText(texts.shift())
-
-  return promise;
-};
+});
 
 /////////////////////////////////////////////////////////////
 // Other helper functions

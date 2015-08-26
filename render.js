@@ -56,12 +56,9 @@ var UI = {
     UI._l = [];
   },
 
-  wasteTime: function(toWaste, showDot = true) {
+  wasteTime: (toWaste, showDot = true) => new Promise((resolve) => {
     let timeToWaste = toWaste;
     UI._states.disableAllInput = true;
-
-    let finalPromiseResolve = null;
-    let finalPromise = new Promise((resolve,reject)=> finalPromiseResolve = resolve);
 
     const MILISEC_PER_DOT = Math.min(toWaste, 200);
     function wasteTimeStep() {
@@ -74,7 +71,7 @@ var UI = {
 
         timeToWaste = Math.max(timeToWaste - MILISEC_PER_DOT, 0);
         if (timeToWaste <= 0) {
-          finalPromiseResolve();
+          resolve();
           UI._states.disableAllInput = false;
         } else {
           wasteTimeStep();
@@ -83,13 +80,9 @@ var UI = {
     };
 
     wasteTimeStep();
-    return finalPromise;
-  },
+  }),
 
-  getChoice: function(...choices) {
-    let finalPromiseResolve = null;
-    let promise = new Promise((resolve,reject) => finalPromiseResolve = resolve);
-
+  getChoice: (...choices) => new Promise((resolve) => {
     UI._states.disableAllInput = true;
 
     let buttons = choices.map((c, idx) => {
@@ -99,7 +92,7 @@ var UI = {
           bt.forceEnable = false;
           bt.visible = false;
         });
-        finalPromiseResolve(idx);
+        resolve(idx);
       });
       bt.inline = true;
       bt.forceEnable = true;
@@ -107,25 +100,20 @@ var UI = {
     });
 
     m.redraw();
-    return promise;
-  },
+  }),
 
-  anykey: function() {
+  anykey: () => new Promise((resolve) => {
     var anyKeyText = UI.t("Click anywhere to continue.", "#FD8A08");
     UI._states.disableAllInput = true;
-
-    let promise = new Promise((resolve,reject) => {
-      window.onmousedown = function() {
-        resolve();
-        window.onmousedown = null;
-        UI._states.disableAllInput = false;
-        anyKeyText.visible = false;
-      }
-    });
-    // promise.then(() => m.redraw());
+    
+    window.onmousedown = function() {
+      resolve();
+      window.onmousedown = null;
+      UI._states.disableAllInput = false;
+      anyKeyText.visible = false;
+    }
     m.redraw();
-    return promise;
-  },
+  }),
 
   // getter
   list: function() {return UI._l},

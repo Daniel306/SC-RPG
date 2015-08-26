@@ -53,7 +53,7 @@ function story(){
 }
 
 function menu() {
-  triggerEvent().then(() => {
+  // triggerEvent().then(() => {
     cls();
     createEvents(5);
     t("Welcome to Seoul");
@@ -81,7 +81,7 @@ function menu() {
     });
 
     redraw();    
-  });
+  //});
 }
 
 let loadScreen = gameMenu(start, () => {

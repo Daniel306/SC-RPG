@@ -21,7 +21,14 @@ const DAY = 24*HOUR;
 
 
 let createEvents = function(seed) {
+  Math.seed("" + seed);
 
+  createEvent(START_TIME, DAY, ((moneyGet) => () => {
+    GS.player.cash += moneyGet;
+    return vn("You found $" + moneyGet);
+  }) (Math.floor(Math.r() * 5)));
+
+/*
   createEvent(START_TIME, DAY, ()=>{
     let loss = Math.min(30, GS.player.energy);
     GS.player.energy -= loss;
@@ -39,7 +46,7 @@ let createEvents = function(seed) {
       "NOOB!",
       "then walks away")
   })
-
+*/
   eventList.sort((a,b) => {
     return b.startTime - a.startTime;
   })

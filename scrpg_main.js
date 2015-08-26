@@ -92,6 +92,8 @@ let loadScreen = gameMenu(start, () => {
       anykey().then(loadScreen);
     } else {
       GS = JSON.parse(localStorage["GS" + i]);
+      createEvents(GS.seed);
+
       cls();
       t("loaded succesfully")
       anykey().then(menu);
@@ -111,6 +113,7 @@ let loadScreen = gameMenu(start, () => {
     
 });
 
-start();
+newGame();
+menu();
 m.mount(document.body, Renderer);
 

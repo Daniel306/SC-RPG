@@ -118,10 +118,14 @@ let giveEnergy = (toGive) => {
   return gain;
 }
 
-exports.GS = {
-  player: newPlayer(),
-  time: 0,
-  curBossIdx: 0,
+let newGame = () => {
+  window.GS = {
+    player: newPlayer(),
+    time: 0,
+    curBossIdx: 0,
+    seed: Math.floor(Math.random() * 1000000)
+  };
+  createEvents(window.GS.seed);
 };
 
 _.extend(exports, {
@@ -135,6 +139,8 @@ _.extend(exports, {
   generatePlayer,
   newBoss,
   
+  newGame,
+
   getTime,
 });
 

@@ -3,8 +3,6 @@
 var Util = {};
 var U = Util;
 
-Math.r = Math.random;
-
 _.extend(Util, {
   toggleFullscreen: function() {
     var doc = window.document;

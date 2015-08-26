@@ -60,12 +60,12 @@ function menu() {
   t("Where would you like to go?");
   t("");
 
-  bt("Home", () => home());
-  bt("Internet Cafe", () => cafe());
-  bt("Pro Tour");
-  bt("University", () => uni());
-  bt("Mall", () => mall());
-  bt("Fate Zero Prologue", () => fate());
+  bt("Home", home);
+  bt("Internet Cafe", cafe);
+  bt("Tournament", tournament);
+  bt("University", uni);
+  bt("Mall", mall);
+  bt("Fate Zero Prologue", fate);
 
   t("");
 
@@ -109,6 +109,6 @@ let loadScreen = gameMenu(start, () => {
     
 });
 
-start();
+menu();
 m.mount(document.body, Renderer);
 

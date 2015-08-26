@@ -11,6 +11,7 @@
         scrpg_mall.js\
         scrpg_cafe.js\
         scrpg_combat.js\
+        scrpg_tournament.js\
         scrpg_fate.js\
         scrpg_level.js\
         \

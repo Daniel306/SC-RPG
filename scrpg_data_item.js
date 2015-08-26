@@ -93,8 +93,8 @@ let unequipItem = (slot) => {
 };
 
 // returns a TEMP player obj.
-let getEquipedPlayerStat = () => {
-  let p = _.clone(GS.player, true);
+let getEquipedPlayerStat = (player) => {
+  let p = _.clone(player, true);
 
   for (let slot in EQUIP_TYPE_TO_SLOT) {
     let itemName = p.equip[EQUIP_TYPE_TO_SLOT[slot]];

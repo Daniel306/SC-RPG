@@ -73,7 +73,9 @@ var UI = {
 
         timeToWaste = Math.max(timeToWaste - MILISEC_PER_DOT, 0);
         if (timeToWaste <= 0) {
-          t("");
+          if (showDot) {
+            UI.t("")
+          }
           resolve();
           UI._states.disableAllInput = false;
         } else {

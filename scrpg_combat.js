@@ -159,7 +159,7 @@ let battle = (map, teams) => new Promise((resolve) => {
       resolve(-1);
     });
 
-    pauseBt.inline = quitBt.inline = true;
+    pauseBt.inline = true;
 
     
     t(map + " " + timeText())

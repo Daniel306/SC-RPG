@@ -110,10 +110,11 @@ let loadScreen = gameMenu(start, () => {
     }
     bt(name, ()=>loadSlot(i));
   }
-    
 });
 
 newGame();
+
 menu();
+
 m.mount(document.body, Renderer);
 

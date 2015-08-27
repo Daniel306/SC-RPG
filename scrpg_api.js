@@ -1,6 +1,6 @@
 // t("test to draw", "text to draw #2"...)
 let t = (...texts) => {
-  return ct("#008", ...texts);
+  return ct(null, ...texts);
 };
 
 // ct(color, "text to draw", "text to draw #2"...)

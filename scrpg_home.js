@@ -91,6 +91,7 @@ let home = gameMenu(menu, () => {
 
   bt("Inventory", inventory);
   bt("Sleep", sleep);
+  bt("Light Switch", () => UI.globalClass() == "day" ? UI.globalClass("night") : UI.globalClass("day"))
   bt("Save", saveScreen);
 });
 

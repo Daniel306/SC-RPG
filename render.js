@@ -11,6 +11,8 @@ var UI = {
     disableAllInput: false,
   },
 
+  globalClass: m.prop("day"),
+
   _add: function(ele) {
     ele.visible = true;
     ele.inline = !!ele.inline;
@@ -20,7 +22,7 @@ var UI = {
   },
 
   // put a text
-  t: function(text, c = "#00F") {
+  t: function(text, c = null) {
     return UI._add({
       type: "text",
       text: text,
@@ -71,6 +73,7 @@ var UI = {
 
         timeToWaste = Math.max(timeToWaste - MILISEC_PER_DOT, 0);
         if (timeToWaste <= 0) {
+          t("");
           resolve();
           UI._states.disableAllInput = false;
         } else {
@@ -131,25 +134,34 @@ var Renderer = {
 
   //view
   view: function(ctrl) {
-    return m("div", [
+    return m("div", {
+        class: "game-container " +  UI.globalClass()
+      },[
       ctrl.list().filter((item) => {
         return item.visible;
       }).map(function(item, idx) {
-        return m(item.inline ? "span":"div", [
+        return item.inline ? 
+        m("span", [
           itemToM(item)
-        ]);
+        ]) :
+        m("span", [
+          itemToM(item),
+          m("br")
+        ])
       }),
     ]);
 
     function itemToM (item) {
       let toCall = {
         "text": (item) => {
-          return m("span", {style: "color: " + item.color + "; display: inline-block"}, item.text)
+          if (item.color)
+            return m("span", {style: "color: " + item.color}, item.text)
+          else
+            return m("span", item.text)
         },
         "button":  (item) => {
           return m("button", {
             onclick: item.func,
-            // style: "color:" + item.color,
             disabled: (UI.states().disableAllInput || !item.enableTest()) && !item.forceEnable,
           },  item.name)
         },

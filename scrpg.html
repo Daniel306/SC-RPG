@@ -5,6 +5,47 @@
   <meta name="viewport" content="width=device-width"/>
 
   <style>
+    .game-container {
+      top:0;
+      left:0;
+      bottom:0;
+      right:0;
+      position:absolute;
+      padding: 1em;
+    }
+
+    .day {
+      background-color: white;
+      color:black;
+    }
+    .day button, input {
+      background-color: white;
+      border: 1px solid black;
+      color: black;
+    }
+    .day button:hover {
+      background-color: #CBECCA;
+    }
+    .day button:active {
+      background-color: #AEC0AD;
+    }
+
+    .night {
+      background-color: black;
+      color: white; 
+    }
+    .night button, input {
+      background-color: black;
+      border: 1px solid white;
+      color: white;
+    }
+    .night button:hover {
+      background-color: #1B5B01;
+    }
+    .night button:active {
+      background-color: #195F01;
+    }
+
     body, input, button {
       font-size: 1em;
       font-family: "Lucida Console", Monaco, monospace;
@@ -17,23 +58,12 @@
     button {
       margin: 0.1em 0.2em 0.1em 0;
       padding: 0.1em 0.5em;
-      background-color: white;
-      border: 1px solid black;
       outline: none;
     }
-
-    button:hover {
-      background-color: #CBECCA;
-    }
-
-    button:active {
-      background-color: #AEC0AD;
-    }
-
     button:disabled {
-      color: #ccc;
+      border-color: #797979;
+      color: #797979;
     }
-
   </style>
 </head>
 

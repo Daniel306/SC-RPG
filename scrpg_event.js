@@ -48,6 +48,7 @@ let createEvents = function(seed) {
 
 
   createEvent(START_TIME, DAY, ()=>{
+    /*
     let loss = Math.min(30, GS.player.energy);
     GS.player.energy -= loss;
 
@@ -57,6 +58,29 @@ let createEvents = function(seed) {
       "You get a stomachache",
       "You lose " + loss + " energy",
       "You decide to never pay them for food")
+*/
+    return vn("A new restaurant just opened",
+      "They are giving free food to taste",
+      "Do you want to eat?").then(yesOrNo).then((no) => {
+        if(no){
+          return vn("You reject the free food",
+            "What's wrong with you?");
+        }else{
+          if (seed % 2 >= 1){ // good event
+            let gain = giveEnergy(20);
+            return vn("It was delicious",
+              "You recover " + gain + " energy",
+            "But seeing the price you decide to never pay for it");
+          } else {
+            let loss = Math.min(30, GS.player.energy);
+            GS.player.energy -= loss;
+            return vn("The food is ok ",
+              "You get a stomachache",
+              "You lose " + loss + " energy",
+              "You decide to never pay them for food")
+          }
+        } 
+      })
   });
 
   createEvent(new Date(START_TIME.getTime()+7*DAY*1000), DAY, ()=> {

@@ -78,6 +78,7 @@ function gameMenu(backTo, fcn) {
     let returnVal = fcn(...args);
 
     t("");
+    t("");
     bt("Back", backTo);
     redraw();
     return returnVal;    

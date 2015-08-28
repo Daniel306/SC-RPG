@@ -56,12 +56,11 @@ let battle = (map, teams) => new Promise((resolve) => {
         continue;
       }
 
-      let pp = p.player;
+      let pp = getEquipedPlayerStat(p.player);
       let pStratFactor = pp.strat * 0.03 + 1;
 
       p.resource += (Math.log(pp.macro * pStratFactor) / 5) * Math.random();
       p.troop += (Math.log(pp.macro * pStratFactor) / 5) * Math.random() * (Math.pow(p.resource, 1.2) / 50);
-      p.apm = pp.micro + pp.macro + 50 + randint(1, 50);
 
       // lose energy
       let pEnergyBefore = pp.energy;
@@ -91,7 +90,7 @@ let battle = (map, teams) => new Promise((resolve) => {
         continue;
       }
       let e = Util.randomPickFromArray(possibleEnemies);
-      let ep = e.player;
+      let ep = getEquipedPlayerStat(e.player);
       let eStratFactor = ep.strat * 0.03 + 1;
 
       // fight logic
@@ -131,8 +130,8 @@ let battle = (map, teams) => new Promise((resolve) => {
         p.resource -= troopUsed * luck;
         e.resource -= troopUsed * luck;
 
-        pp.energy -= 1/luck;
-        ep.energy -= luck;
+        p.player.energy -= 1/luck;
+        e.player.energy -= luck;
 
         roundTR(p);
         roundTR(e);

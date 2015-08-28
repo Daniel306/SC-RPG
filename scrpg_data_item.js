@@ -2,8 +2,8 @@
 
 let makeEquip = (statBoost) => {
   let applyEquip = (p, e, fcn) => {
-    for(let ele of e) {
-      if (typeof e[ele] == typeof p[ele] == "number") {
+    for(let ele in e) {
+      if (typeof e[ele] == "number" && typeof p[ele] == "number") {
         p[ele] = fcn(p[ele], e[ele]);
       } else {
         console.log("fail");
@@ -12,10 +12,10 @@ let makeEquip = (statBoost) => {
   };
 
   return {
-    apply: (p) => {
+    equip: (p) => {
       applyEquip(p, statBoost, (a, b) => a+b)
     },
-    unapply: (p) => {
+    unequip: (p) => {
       applyEquip(p, statBoost, (a, b) => a-b)
     }
   };
@@ -27,7 +27,7 @@ let ITEM_DATA = [
   {name: "coffee",                 type:"c",   price: 20, desc: "Perfectly roasted, gives 40 energy"         , effect: ()=>giveEnergy(40)},
   {name: "red bull",               type:"c",   price: 50, desc: "Red bull gives you wins, provides 60 energy", effect: ()=>giveEnergy(60)},
   // mouse
-  {name: "budget mouse",           type:"em",  price: 10, desc: "+1 Micro and +1 Macro",                       effect: makeEquip({micro:1, macro: 1})},
+  {name: "budget mouse",           type:"em",  price: 10, desc: "+1 Micro and +1 Macro",                       effect: makeEquip({micro:1, macro: 100})},
   {name: "high quality mouse",     type:"em",  price: 15, desc: "+2 Micro and +2 Macro",                       effect: makeEquip({micro:2, macro: 2})},
   // keyboard
   {name: "budget keyboard",        type:"ek",  price: 10, desc: "+1 Micro and +2 Macro",                       effect: makeEquip({micro:1, macro: 2})},
@@ -86,13 +86,16 @@ let unequipItem = (slot) => {
 
 // returns a TEMP player obj.
 let getEquipedPlayerStat = (player) => {
+  if (!player.equip) {
+    return player;
+  }
   let p = _.clone(player, true);
 
   for (let slot in EQUIP_TYPE_TO_SLOT) {
     let itemName = p.equip[EQUIP_TYPE_TO_SLOT[slot]];
     if (itemName) {
       let itemData = getItemByName(itemName);
-      itemName.apply(p);
+      itemData.effect.equip(p);
     }
   }
   return p;

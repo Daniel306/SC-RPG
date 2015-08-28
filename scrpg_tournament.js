@@ -14,10 +14,35 @@ let tournament = gameMenu(menu, () => {
     newBoss (20000, "Boxer",         "t", 300, 30, 30, 30),
   ];
 
+  let onGameWin = () => {
+    cls();
+    if (GS.time < 2592000) // before SC 2 comes out
+      return vn(
+        "Congratulations",
+        "You won against the best SC player",
+        "and usurped their position",
+        "You did it before the release of SC2",
+        "and managed to become a legend in time",
+        "You will be forever remembered",
+        "as the greatest SC player of all time!",
+        "GOOD END"
+      );
+    else
+      return vn(
+        "Congratulations",
+        "You won against the best SC player",
+        "Sadly you were unable to become the legend you wished to be",
+        "with SC2 coming out, no one cared about SC anymore",
+        "but at least you won",
+        "At least you can try again with SC2",
+        "BAD END"
+      );
+  };
+
   let onWin = (boss, bossIdx) => {
     let isFirstWin = bossIdx == GS.curBossIdx;
 
-    cls();
+    t("");
     t("You won!");
     t("");
     let expGain = opponentToExp(boss);
@@ -42,7 +67,11 @@ let tournament = gameMenu(menu, () => {
       }
       p.cash += reward;
 
-      return anykey();
+      if (GS.curBossIdx >= bosses.length) {
+        return onGameWin();        
+      } else {
+        return anykey();
+      }
     }).then(tournament);
   }
 

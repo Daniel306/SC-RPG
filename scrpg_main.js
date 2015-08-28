@@ -53,11 +53,11 @@ function story(){
 }
 
 function menu() {
-  // triggerEvent().then(() => {
+   triggerEvent().then(() => {
     cls();
     createEvents(5);
     t("Welcome to Seoul");
-    t("It is " + getTime().toLocaleString());
+    t("It is " + getGameTime().toLocaleString());
     t("");
     t("Where would you like to go?");
     t("");
@@ -67,6 +67,10 @@ function menu() {
     bt("Tournament", tournament);
     bt("University", uni);
     bt("Mall", mall);
+    bt("Move time", () => {
+      moveTime(1,2,15);
+      menu();
+    })
 
     t("");
 
@@ -81,7 +85,7 @@ function menu() {
     });
 
     redraw();    
-  //});
+  });
 }
 
 let loadScreen = gameMenu(start, () => {

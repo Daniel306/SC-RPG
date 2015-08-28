@@ -1,15 +1,32 @@
 (function(exports){
 
-let eventList = [];
+let eventList;
 
+let idNum;
+ 
 
 let createEvent = function(startTime, dur, fcn){
   eventList.push({
     startTime,
     dur,
+    id : idNum++,
     fcn
   })
 }
+
+/*
+let runEvent = function(e){
+  GS.usedEventIds.push(e.id);
+  e.fcn();
+}
+*/
+/*
+let clearCompletedEvents = function(){
+  eventList = eventList.filter((e) => {
+    return GS.usedEventIds.indexOf (e.id) < 0;
+  })
+}
+*/
 
 const START_TIME = new Date(2010, 6, 27);
 const MINUTE = 60;
@@ -22,13 +39,14 @@ const DAY = 24*HOUR;
 
 let createEvents = function(seed) {
   Math.seed("" + seed);
-
+  idNum = 0;
+  eventList = [];
   createEvent(START_TIME, DAY, ((moneyGet) => () => {
     GS.player.cash += moneyGet;
     return vn("You found $" + moneyGet);
   }) (Math.floor(Math.r() * 5)));
 
-/*
+
   createEvent(START_TIME, DAY, ()=>{
     let loss = Math.min(30, GS.player.energy);
     GS.player.energy -= loss;
@@ -41,26 +59,28 @@ let createEvents = function(seed) {
       "You decide to never pay them for food")
   });
 
-  createEvent(START_TIME+7*DAY, DAY, ()=> {
+  createEvent(new Date(START_TIME.getTime()+7*DAY*1000), DAY, ()=> {
     return vn("a random passerby shouts at you:",
       "NOOB!",
       "then walks away")
   })
-*/
+
   eventList.sort((a,b) => {
-    return b.startTime - a.startTime;
+    return a.startTime - b.startTime;
   })
 }
 
 // Checks if event should trigger based on current time
 // Also eliminates events whose deadline passed from list.
 let triggerEvent = () => new Promise((resolve) => {
-  while(eventList.length && eventList[0].startTime + eventList[0].dur < getTime() ){
-    eventList.shift(); // passed deadline
+  while(eventList.length && ((eventList[0].startTime + eventList[0].dur < getGameTime())
+        || GS.usedEventIds.indexOf (eventList[0].id) >= 0)){
+    eventList.shift(); 
   }
 
-  if (eventList.length && eventList[0].startTime <= getTime()) {
+  if (eventList.length && eventList[0].startTime <= getGameTime()) {
     cls();
+    GS.usedEventIds.push(eventList[0].id);
     eventList[0].fcn().then(resolve);
   } else {
     resolve();

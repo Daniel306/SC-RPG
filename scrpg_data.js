@@ -84,10 +84,14 @@ let newPlayer = function() {
 };
 
 
-let getTime = () => {
+let getGameTime = () => {
   let startTime = (new Date(2010, 6, 27)).getTime();
   return new Date(startTime + GS.time * 1000);
 };
+
+let moveTime = (days, hours, minutes) =>{
+  GS.time += (((days*24+hours)*60)+minutes)*60
+}
 
 // try to pay for a task
 let takeMoney = function(price, onEnough, onNotEnough){
@@ -123,7 +127,8 @@ let newGame = () => {
     player: newPlayer(),
     time: 0,
     curBossIdx: 0,
-    seed: Math.floor(Math.random() * 1000000)
+    seed: Math.floor(Math.random() * 1000000),
+    usedEventIds: []
   };
   createEvents(window.GS.seed);
 };
@@ -141,7 +146,8 @@ _.extend(exports, {
   
   newGame,
 
-  getTime,
+  getGameTime,
+  moveTime,
 });
 
 })(window);

@@ -40,16 +40,24 @@ let newBoss = function(reward, ...otherParams) {
 };
 
 let generatePlayer = function(skill) {
-  var name = Util.randomPickFromArray(["randomUser", "noob_killer", "fishtastic",
-    "1337player", "LmFao_Master",
-    "Zergling", "I R The_KING", "allThyBase",
-    "Zeratul", "Cerebrate", "Overmind's mind",
-    "Jim Raynor", "MyBase4Aiur", "Weee_Master"]);
+  var name = Util.randomPickFromArray([
+    "fish dude", "IlikePie", "IWannaBe", "theVeryBest",
+    "no1everWas", "hivemind", "randomguy", "randomgirl",
+    "randomfish", "notafish", "totallyafish", "chiquita",
+    "not_a_Vege", "vegetable", "bananas", "asdf",
+    "asdfasdf", "zergling", "hydralist", "ultraling",
+    "123123", "123123asd", "711", "slime",
+    "balrog", "red_snail", "blue_snail", "big_small",
+    "white_mouse", "brown_mouse", "snail_mouse",
+    "fish_mouse", "fish_fish", "mouse_fish", "iron",
+    "calcium", "vitaminC", "peanut", "butter", "sandwich",
+    "salt", "corn", "Palm Oil"
+  ]);
 
   return newCharacter(
     name,
     Util.randomPickFromArray(["t", "p", "z"]), 
-    100, 
+    Util.randint(40, 100), 
     Util.randint(skill, skill * 1.5),
     Util.randint(skill, skill * 1.5),
     Util.randint(skill, skill * 1.5)
@@ -57,7 +65,7 @@ let generatePlayer = function(skill) {
 };
 
 let newPlayer = function() {
-  let player = newCharacter("nameless", "t", 100, 5, 5, 5);
+  let player = newCharacter("nameless", "t", 100, 3, 3, 3);
   _.extend(player, {
     level: 1,
     exp: 0,
@@ -81,8 +89,8 @@ let getGameTime = () => {
   return new Date(startTime + GS.time * 1000);
 };
 
-let moveTime = (days, hours, minutes) =>{
-  GS.time += (((days*24+hours)*60)+minutes)*60
+let moveTime = (days, hours = 0, minutes = 0) =>{
+  GS.time += (((days*24+hours)*60)+minutes)*60;
 }
 
 // try to pay for a task

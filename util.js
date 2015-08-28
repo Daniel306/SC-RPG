@@ -102,7 +102,7 @@ _.extend(Util, {
     return lo + Math.random() * (hi - lo);
   },
   randint: function(lo, hi) {
-    return Math.floor(Util.rand(lo, hi));
+    return Math.floor(Util.rand(lo, hi + 1 - 0.000001));
   },
 
   noop: () => {}

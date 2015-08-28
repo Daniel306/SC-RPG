@@ -20,14 +20,20 @@ let uni = gameMenu(menu, () => {
   });
 
   for (let x of [["micro","Micro-Control"], ["macro", "Macro-Management"], ["strat","Strategy"]] ){
-    bt("Study " + x[1] +" - $2", () => {
-      takeMoney(2, function(){ 
+    let price = GS.player[x[0]] * 10;
+    bt("Study " + x[1] +" - $" + price, () => {
+      takeMoney(price, function(){ 
         cls();
         GS.player[x[0]] += 1;
-        t("Your studies have improved your "+ x[1] + "");
-        anykey().then(() => {
-          uni();
-        })
+
+        moveTime(0, 1);
+        t("Studying")
+        wasteTime(1000).then(() => {
+          t("Your studies have improved your "+ x[1] + "");
+          anykey().then(() => {
+            uni();
+          })          
+        });
       });
     })
   }

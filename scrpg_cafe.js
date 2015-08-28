@@ -68,11 +68,66 @@ function cafe() {
   let joinGame = gameMenu(serverScreen, () => {
     t("Available Games")
     t("");
-    ["1v1 noob only", "please be a noob", "1v1 python", "5v3 crazy computer", "BGHBGHBGH", "Sunken D - pro only"].forEach((name) => {
-      bt(name, () => {
+
+    let diffs = [
+      "noob only",
+      "beginner",
+      "average",
+      "any",
+      "no noobs",
+      "expert",
+      "pro only"
+    ];
+
+    let format = [
+      ["1v1",1],
+      ["1 on 1",1],
+      ["2v2",2],
+      ["2 vs 2",2],
+      ["3v3",3],
+      ["", 1],
+      ["", 2],
+      ["", 3],
+      ["", 4]
+    ];
+
+    let mapNames = [
+      "Python",
+      "Ruby",
+      "BGHBGHBHG",
+      "FASTEST",
+      "fastest",
+      "Lost temple",
+      "JOINJOIN"
+    ];
+
+    let gameCount = U.randint(5, 10);
+    let games = [];
+    for (var i=0; i<gameCount; i++) {
+      let d = U.randint(0, diffs.length - 1);
+      let f = Util.randomPickFromArray(format);
+      let m = Util.randomPickFromArray(mapNames);
+
+      games.push({
+        diff: d,
+        count: f[1],
+        name: m + " " + f[0] + " " + diffs[d]
+      });
+    }
+
+    games.forEach((gameData) => {
+      bt(gameData.name, () => {
+        let team1 = [], team2 = [];
+        for (let i = 0; i < gameData.count; i++) {
+          team1.push(generatePlayer(3 + (gameData.diff) * 8));
+          team2.push(generatePlayer(3 + (gameData.diff) * 8));
+        }
+
+        team1[0] = GS.player;
+
         battle(name, [
-          [GS.player, generatePlayer(1)],
-          [generatePlayer(1), generatePlayer(1)]
+          team1,
+          team2
         ]).then((teamThatWon) => {
           t("");
           t("Game has ended");

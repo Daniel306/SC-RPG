@@ -157,6 +157,7 @@ let battle = (map, teams) => new Promise((resolve) => {
     }
 
     gameTime += 7;
+    moveTime(0, 0, 7);
 
     battleStepTimeoutId = setTimeout(battleStep, 50);
     renderBattle();

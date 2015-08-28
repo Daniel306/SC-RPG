@@ -112,7 +112,7 @@ let beg = gameMenu(mall, () => {
   }
 
   let SCHater = function(){
-    takeEnergy(Math.min(GS.player.energy, 20), (loss) => {
+    return takeEnergy(Math.min(GS.player.energy, 20), (loss) => {
       return vn("An evil starcraft hater calls you a noob",
         "tells you to play Call of Duty instead",
         "Then kicks you",
@@ -121,10 +121,21 @@ let beg = gameMenu(mall, () => {
     })
   }
 
+  let takeMoneyEvent = () => {
+    let takeHowMuch = Math.floor(GS.player.cash * Math.max(Math.random() - 0.2, 0.2));
+    GS.player.cash -= takeHowMuch;
+    return vn(
+      "Cops showed up",
+      "apparently you need a license to beg",
+      "you bribe them with $" + takeHowMuch
+    );
+  }
+
   let useSign = function(List){
     takeEnergy(10, () => {
       cls();
       t("Begging for money");
+      moveTime(0, 1);
       return wasteTime(1000).then(Util.randomPickProbList(List)).then(beg);
     }, () => {
       t("You are too tired to beg")
@@ -134,8 +145,8 @@ let beg = gameMenu(mall, () => {
 
   t("Choose your begging sign");
   bt("\"I hunger, Please food\"",  
-      () => useSign([bitOfMoney, 2, bitOfFood, 3, lotsOfMoney, 1]));
+      () => useSign([bitOfMoney, 2, bitOfFood, 3, lotsOfMoney, 1, takeMoneyEvent, 1]));
 
   bt("\"Will play SC for food\"", 
-    () => useSign([bitOfMoney, 2, bitOfFood, 2, SCFan, 3, SCHater, 3]));
+    () => useSign([bitOfMoney, 2, bitOfFood, 2, SCFan, 3, SCHater, 3, takeMoneyEvent, 1]));
 });

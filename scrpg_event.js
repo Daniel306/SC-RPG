@@ -3,9 +3,14 @@
 let eventList;
 
 let idNum;
- 
 
-let createEvent = function(startTime, dur, fcn){
+const START_TIME = new Date(2010, 6, 27);
+const MINUTE = 60;
+const HOUR = 60*MINUTE;
+const DAY = 24*HOUR;
+
+let createEvent = function(d, h, dur, fcn){
+  let startTime = START_TIME.getTime()+DAY*d*1000 + HOUR*h*1000;
   eventList.push({
     startTime,
     dur,
@@ -28,11 +33,6 @@ let clearCompletedEvents = function(){
 }
 */
 
-const START_TIME = new Date(2010, 6, 27);
-const MINUTE = 60;
-const HOUR = 60*MINUTE;
-const DAY = 24*HOUR;
-
 // Below are a bunch of events
 //let crazy_guy = 
 
@@ -41,24 +41,13 @@ let createEvents = function(seed) {
   Math.seed("" + seed);
   idNum = 0;
   eventList = [];
-  createEvent(START_TIME, DAY, ((moneyGet) => () => {
+  createEvent(1, 0, DAY, ((moneyGet) => () => {
     GS.player.cash += moneyGet;
     return vn("You found $" + moneyGet);
-  }) (Math.floor(Math.r() * 5)));
+  }) (Math.floor(Math.r() * 5 + 1)));
 
 
-  createEvent(START_TIME, DAY, ()=>{
-    /*
-    let loss = Math.min(30, GS.player.energy);
-    GS.player.energy -= loss;
-
-    return vn("A new restaurant just opened",
-      "They are giving free food to taste",
-      "The food is ok ",
-      "You get a stomachache",
-      "You lose " + loss + " energy",
-      "You decide to never pay them for food")
-*/
+  createEvent(2, 0, DAY, () => {
     return vn("A new restaurant just opened",
       "They are giving free food to taste",
       "Do you want to eat?").then(yesOrNo).then((no) => {
@@ -83,15 +72,15 @@ let createEvents = function(seed) {
       })
   });
 
-  createEvent(new Date(START_TIME.getTime()+7*DAY*1000), DAY, ()=> {
+  createEvent(7, 0, DAY, ()=> {
     return vn("a random passerby shouts at you:",
       "NOOB!",
       "then walks away")
-  })
+  });
 
   eventList.sort((a,b) => {
     return a.startTime - b.startTime;
-  })
+  });
 }
 
 // Checks if event should trigger based on current time

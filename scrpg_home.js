@@ -81,7 +81,9 @@ let home = gameMenu(menu, () => {
       t("");
       t("You woke up! Energy fully restored");
       GS.player.energy = GS.player.maxEnergy;
-      return anykey()
+
+      moveTime(0, 8, 0);
+      return anykey();
     }).then(home);
   };
 

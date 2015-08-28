@@ -30,7 +30,7 @@ function story(){
     "Until one day...",
     GS.player.name + " discovered a game called",
     "\"Starcraft\"",
-    "At that moment " + GS.player.name + " discovered his true destiny",
+    "At that moment " + GS.player.name + " discovered their true destiny",
     GS.player.name + " swore to become the best Starcraft player in history"
   ).then(() => {
     cls();
@@ -66,10 +66,6 @@ function menu() {
     bt("Tournament", tournament);
     bt("University", uni);
     bt("Mall", mall);
-    bt("Move time", () => {
-      moveTime(1,2,15);
-      menu();
-    })
 
     t("");
 
@@ -117,7 +113,7 @@ let loadScreen = gameMenu(start, () => {
 
 newGame();
 
-menu();
+start();
 
 m.mount(document.body, Renderer);
 

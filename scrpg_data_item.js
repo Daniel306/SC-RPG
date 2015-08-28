@@ -3,15 +3,7 @@
 let makeEquip = (statBoost) => {
   let applyEquip = (p, e, fcn) => {
     for(let ele of e) {
-      if (e[ele] instanceof Array && p[ele] instanceof Array) {
-        for (let i=0; i<e[ele].length; i++) {
-          if (typeof e[ele] == typeof p[ele] == "number") {
-            p[ele][i] = fcn(p[ele][i], e[ele][i]);
-          } else {
-            console.log("fail");
-          }
-        }
-      } else if (typeof e[ele] == typeof p[ele] == "number") {
+      if (typeof e[ele] == typeof p[ele] == "number") {
         p[ele] = fcn(p[ele], e[ele]);
       } else {
         console.log("fail");
@@ -41,7 +33,7 @@ let ITEM_DATA = [
   {name: "budget keyboard",        type:"ek",  price: 10, desc: "+1 Micro and +2 Macro",                       effect: makeEquip({micro:1, macro: 2})},
   {name: "high quality keyboard",  type:"ek",  price: 50, desc: "+2 Micro and +3 Macro",                       effect: makeEquip({micro:2, macro: 3})},
   // charm
-  {name: "cute zergling figurine", type:"ec",  price: 10, desc: "+3 vs Zerg. \"notice me\".",                  effect: makeEquip({skills:[0,0,3]})},
+  {name: "cute zergling figurine", type:"ec",  price: 10, desc: "+1 Micro.",                                   effect: makeEquip({micro: 1})},
   {name: "four-leaf clover",       type:"ec",  price: 50, desc: "+1 Strategy",                                 effect: makeEquip({strat: 1})},
 ];
 

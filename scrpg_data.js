@@ -21,13 +21,12 @@ let opponentToExp = (e) => {
   return Math.round(top/bot);
 };
 
-let newCharacter = function(name, race, energy, skills, micro, macro, strat) { 
+let newCharacter = function(name, race, energy, micro, macro, strat) { 
   return {
     name,
     race,
     energy,
     maxEnergy: energy,
-    skills: {"t": skills[0], "p": skills[1], "z": skills[2]},
     micro,
     macro,
     strat
@@ -51,11 +50,6 @@ let generatePlayer = function(skill) {
     name,
     Util.randomPickFromArray(["t", "p", "z"]), 
     100, 
-    [
-      Util.randint(skill, skill * 1.5),
-      Util.randint(skill, skill * 1.5),
-      Util.randint(skill, skill * 1.5)
-    ],
     Util.randint(skill, skill * 1.5),
     Util.randint(skill, skill * 1.5),
     Util.randint(skill, skill * 1.5)
@@ -63,7 +57,7 @@ let generatePlayer = function(skill) {
 };
 
 let newPlayer = function() {
-  let player = newCharacter("nameless", "t", 100, [0,0,0], 5, 5, 5);
+  let player = newCharacter("nameless", "t", 100, 5, 5, 5);
   _.extend(player, {
     level: 1,
     exp: 0,
@@ -72,7 +66,6 @@ let newPlayer = function() {
     cash: 100,
     saving: 0,
     statPoints: 0,
-    racePoints: 0,
     inventory: ["coffee", "tea", "coffee"],
     equip: {
       left: null,
@@ -82,7 +75,6 @@ let newPlayer = function() {
   });
   return player;
 };
-
 
 let getGameTime = () => {
   let startTime = (new Date(2010, 6, 27)).getTime();
@@ -105,14 +97,15 @@ let takeMoney = function(price, onEnough, onNotEnough){
     }
   };
 }
-let takeEnergy = function(energy, onEnough, noNotEnough) {
+
+let takeEnergy = function(energy, onEnough, onNotEnough) {
   if (GS.player.energy >= energy) {
     GS.player.energy -= energy;
     if (onEnough)
       return onEnough(energy);
   } else {
     if (onNotEnough)
-      return noNotEnough(energy);
+      return onNotEnough(energy);
   }
 }
 // returns amount given

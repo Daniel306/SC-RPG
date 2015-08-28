@@ -3,15 +3,15 @@ let tournament = gameMenu(menu, () => {
   t("Who would you like to play against?");
 
   let bosses = [
-    newBoss (100,   "Master Fish",   "t",  100, [5, 5, 5 ],  5,  5, 5),
-    newBoss (200,   "Hax0r1",        "t",  120, [10, 10, 10 ],  10,  10, 10),
-    newBoss (350,   "July_zerg",     "z",  150, [30, 30, 40 ],  45,  47, 45),
-    newBoss (600,   "Stork[gm]",     "p",  180, [45, 45, 40 ],  50,  56, 43),
-    newBoss (1000,  "[red]NaDa",     "t",  200, [45, 45, 45 ],  55,  65, 50),
-    newBoss (1500,  "sAviOr[gm]",    "z",  220, [55, 55, 50 ],  75,  73, 50),
-    newBoss (2500,  "n.Die_Jaedong", "z",  230, [65, 75, 100],  85,  85, 80),
-    newBoss (4000,  "Bisu[Shield]",  "p",  250, [85, 85, 80 ],  90,  95, 75),
-    newBoss (20000, "Slayer_Boxer",  "t",  300, [90, 80, 100],  100, 90, 100),
+    newBoss (100,   "Master Fish",   "t", 100,  5,  5,  5),
+    newBoss (200,   "MortalOne",     "p", 120,  7,  7,  7),
+    newBoss (350,   "July",          "z", 150, 10, 10, 10),
+    newBoss (600,   "Stork",         "p", 180, 12, 12, 12),
+    newBoss (1000,  "NaDa",          "t", 200, 15, 15, 15),
+    newBoss (1500,  "Saviour",       "z", 220, 17, 17, 17),
+    newBoss (2500,  "Jaedong",       "z", 230, 20, 20, 20),
+    newBoss (4000,  "Bisu",          "p", 250, 25, 25, 25),
+    newBoss (20000, "Boxer",         "t", 300, 30, 30, 30),
   ];
 
   let onWin = (boss, bossIdx) => {

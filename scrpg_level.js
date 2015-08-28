@@ -16,14 +16,11 @@ let checkLevelUp = () => new Promise((resolve) => {
     t("Level " + levelBefore + " -> " + p.level);
 
     p.statPoints += levelGain;
-    p.racePoints += levelGain;
 
     t(`You gained ${levelGain} stat points!`);
-    t(`You gained ${levelGain} race points!`);
     return anykey()
       .then(spentStatPoints)
-      .then(spentRacePoint)
-      .then(promiseResolve);
+      .then(resolve);
   } else {
     resolve();
   }
@@ -50,35 +47,7 @@ let spentStatPoints = () => new Promise((resolve) => {
     });
 
     t("");
-    bt("Decide Later", resolve);
-    redraw();
-  } else {
-    resolve();
-  }
-});
-
-let spentRacePoint = () => new Promise((resolve) => {
-  let p = GS.player;
-  if (p.racePoints) {
-    cls();
-    t(`You have ${p.racePoints} race points`);
-
-    [["t", "Terran"], ["p", "Protoss"], ["z", "Zerg"]].forEach((obj) => {
-      let stat = obj[0];
-      let statName = obj[1];
-
-      bt("+1 vs " + statName, () => {
-        p.skills[stat] ++;
-        p.racePoints --;
-
-        cls();
-        t("You skill against " + statName + " has incrased! (" + (p.skills[stat] - 1) + " -> " + p.skills[stat] + ")");
-        anykey().then(spentRacePoint).then(resolve);
-      });
-    });
-
-    t("");
-    bt("Decide Later", resolve);
+    bt("Decide Next Level", resolve);
     redraw();
   } else {
     resolve();

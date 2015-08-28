@@ -56,7 +56,6 @@ function menu() {
   // triggerEvent().then(() => {
     cls();
     createEvents(5);
-    t("Welcome to Seoul");
     t("It is " + getTime().toLocaleString());
     t("");
     t("Where would you like to go?");
@@ -80,7 +79,7 @@ function menu() {
       ][c]());
     });
 
-    redraw();    
+    redraw();
   //});
 }
 

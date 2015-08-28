@@ -48,6 +48,7 @@ let battle = (map, teams) => new Promise((resolve) => {
     let roundTR = (p) => {
       p.resource = Math.max(0.0001, p.resource);
       p.troop = Math.max(0.00001, p.resource);
+      p.player.energy = Math.max(p.player.energy, 0);
     };
 
     for (let p of playerData) {
@@ -56,10 +57,33 @@ let battle = (map, teams) => new Promise((resolve) => {
       }
 
       let pp = p.player;
+      let pStratFactor = pp.strat * 0.03 + 1;
 
-      p.resource += (Math.log(pp.macro) / 5) * Math.random();
-      p.troop += (Math.log(pp.macro) / 5) * Math.random() * (Math.pow(p.resource, 1.2) / 50);
+      p.resource += (Math.log(pp.macro * pStratFactor) / 5) * Math.random();
+      p.troop += (Math.log(pp.macro * pStratFactor) / 5) * Math.random() * (Math.pow(p.resource, 1.2) / 50);
       p.apm = pp.micro + pp.macro + 50 + randint(1, 50);
+
+      // lose energy
+      let pEnergyBefore = pp.energy;
+      pp.energy -= 0.1;
+      pp.energy = Math.max(pp.energy, 0);
+      if (pEnergyBefore > 30 && pp.energy < 30) {
+        log(pp.name + " is starting to get tired")
+      }
+      if (pEnergyBefore > 20 && pp.energy < 20) {
+        log(pp.name + " is really tired, APM dropping")
+        pStratFactor *= 0.8;
+      }
+      if (pEnergyBefore > 10 && pp.energy < 10) {
+        log(pp.name + " is exhausted, will collapse soon")
+        pStratFactor *= 0.5;
+      }
+      if (pp.energy == 0) {
+        log(pp.name + ": gg", "#88f");
+        log(pp + " has collapsed!");
+        p.dead = true;
+        continue;
+      }
 
       // pick an enemy
       let possibleEnemies = p.team.enemies.filter ((e) => e.dead == false);
@@ -68,26 +92,50 @@ let battle = (map, teams) => new Promise((resolve) => {
       }
       let e = Util.randomPickFromArray(possibleEnemies);
       let ep = e.player;
+      let eStratFactor = ep.strat * 0.03 + 1;
 
       // fight logic
       if (Math.pow(1.05, p.troop * 2) > rand(2, 100)) {
         let troopUsed = rand(10, 90) / 100 * Math.min(p.troop, e.troop);
 
-        let luck = rand(55, 135)/100;
-        let attackBonus = (pp.skills[ep.race] + 100)/100;
-        let killPercent = luck / attackBonus;
+        let luck = rand(60, 135)/100;
+        let attackBonus = 1;
 
-        e.troop -= troopUsed * killPercent;
-        p.troop -= troopUsed;
+        // apply strat bonus
+        let stratBonus = Util.randomPickProbList([
+          ["attacks from high ground", 1.1],
+          pp.strat,
+          ["attacks from multiple directions", 1.2],
+          Math.max(0, pp.strat - 5),
+          ["attacks using highly upgraded units", 1.4],
+          Math.max(0, pp.strat - 10),
+          ["attacks using sophisticated unit combination", 1.6],
+          Math.max(0, pp.strat - 15),
+          null,
+          50
+        ]);
 
-        let rLost = troopUsed * killPercent * (pp.micro * luck) / (1+ep.micro) * 1.5;
-        p.resource -= troopUsed / luck;
-        e.resource -= rLost;
+        if (stratBonus) {
+          attackBonus *= stratBonus[1];
+          log(pp.name + " " + stratBonus[0]);
+        } else {
+          log(pp.name + " attacks " + ep.name);
+        }
+
+        let killPercent = luck * attackBonus;
+        let microFactor = (3 + pp.micro * pStratFactor) / (3 + ep.micro * eStratFactor);
+
+        e.troop -= troopUsed * killPercent * microFactor;
+        p.troop -= troopUsed / microFactor;
+
+        p.resource -= troopUsed * luck;
+        e.resource -= troopUsed * luck;
+
+        pp.energy -= 1/luck;
+        ep.energy -= luck;
 
         roundTR(p);
         roundTR(e);
-
-        log(pp.name + " attacks " + ep.name);
 
         // gg logic, only happens after fight
         if ((p.resource  / e.resource  > 8 && p.resource - e.resource > 10)
@@ -167,16 +215,22 @@ let battle = (map, teams) => new Promise((resolve) => {
 
     for (let team of teamData) {
       for(let p of team.players) {
-        if (p.dead)
+        if (p.dead) {
           formattedText(
             [p.player.name + " - dead", 0]
-          )
-        else
+          );
+          formattedText(["", 0])
+        } else {
+          let energyPercent = Math.floor((p.player.energy/p.player.maxEnergy) * 100);
           formattedText(
-            [p.player.name, 0], 
-            ["econ " + Math.floor(p.resource), 15],
-            ["units " +  Math.floor(p.troop), 25]
-          )
+            [p.player.name, 0],
+            ["(" + energyPercent + "% Energy)", 15] 
+          );
+          formattedText(
+            ["econ " + Math.floor(p.resource), 0],
+            ["units " +  Math.floor(p.troop), 15]
+          )          
+        }
       }
       t("");
     }

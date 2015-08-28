@@ -80,6 +80,7 @@ let home = gameMenu(menu, () => {
     }).then(()=> {
       t("");
       t("You woke up! Energy fully restored");
+      GS.player.energy = GS.player.maxEnergy;
       return anykey()
     }).then(home);
   };
@@ -87,7 +88,7 @@ let home = gameMenu(menu, () => {
   cls();
   t("Welcome Home!");
   let energyPercent = Math.floor(GS.player.energy/GS.player.maxEnergy * 100);
-  t(`You have ${energyPercent}% energy (${GS.player.energy}/${GS.player.maxEnergy}).`);
+  t(`You have ${energyPercent}% energy (${Math.floor(GS.player.energy)}/${GS.player.maxEnergy}).`);
 
   bt("Inventory", inventory);
   bt("Sleep", sleep);

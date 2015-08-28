@@ -56,7 +56,7 @@ function menu() {
    triggerEvent().then(() => {
     cls();
     createEvents(5);
-    t("It is " + getTime().toLocaleString());
+    t("It is " + getGameTime().toLocaleString());
     t("");
     t("Where would you like to go?");
     t("");

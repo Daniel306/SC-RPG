@@ -64,8 +64,8 @@ let battle = (map, teams) => new Promise((resolve) => {
 
       // lose energy
       let pEnergyBefore = pp.energy;
-      pp.energy -= 0.1;
-      pp.energy = Math.max(pp.energy, 0);
+      p.player.energy -= 0.1;
+      p.player.energy = Math.max(p.player.energy, 0);
       if (pEnergyBefore > 30 && pp.energy < 30) {
         log(pp.name + " is starting to get tired")
       }
@@ -79,7 +79,7 @@ let battle = (map, teams) => new Promise((resolve) => {
       }
       if (pp.energy == 0) {
         log(pp.name + ": gg", "#88f");
-        log(pp + " has collapsed!");
+        log(pp.name + " has collapsed!");
         p.dead = true;
         continue;
       }
@@ -164,7 +164,7 @@ let battle = (map, teams) => new Promise((resolve) => {
   };
 
   var commentaries = [];
-  let log = function(text, color = "#000") {
+  let log = function(text, color = null) {
     commentaries.unshift({
       text: timeText() + "   " + text,
       color

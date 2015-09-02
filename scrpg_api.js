@@ -43,13 +43,13 @@ let anykey = UI.anykey;
 // vn("text 1", "text2", "text3").then(_your_function_)
 let vn = (...texts) => new Promise((resolve) => {
   let printSingleText = (line) => {
-    let words = line.split(" ").reverse();
+    let words = line.split("").reverse();
 
     let curLine = t("");
     let printWord = () => {
-      wasteTime(50, false).then(() => {
+      wasteTime(10, false).then(() => {
         if (words.length) {
-          curLine.text += (" " + words.pop());
+          curLine.text += ("" + words.pop());
           printWord();
         } else {
           anykey().then(() => {

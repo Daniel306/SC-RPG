@@ -29,8 +29,8 @@ function cafe() {
           "It was interesting",
           "And you even enjoyed it a little",
           "Unfortunately, it did not improve any skills that mattered",
-          "Eventually, you left the Internet Cafe without gaining anything"
-        ).then(() => menu());
+          "Eventually, you decided to stop"
+        ).then(playGame);
       });
     });
 
